@@ -3,7 +3,7 @@ import { getChordIntervals, type VoicingStyle } from './chords';
 import type { Mode, StringSet } from './types';
 
 // ── Layout (SVG viewBox 0 0 1000 190) ──
-export const VW = 1000, VH = 190, NX = 40, OW = 46, FMAX = 15;
+export const VW = 1000, VH = 232, NX = 40, OW = 46, FMAX = 15;
 export const PT = 20, PB = 24;
 export const SS = (VH - PT - PB) / (SC - 1); // string spacing
 export const FAW = VW - NX - OW - 4;         // fretted area width
@@ -11,7 +11,7 @@ export const FW = FAW / FMAX;                // per-fret width
 export const INLAYS = [3, 5, 7, 9, 12, 15];
 export const SW = [0.55, 0.7, 0.9, 1.1, 1.35, 1.6]; // string thickness
 
-// ── Maple palette (light wood) ──
+// ── Maple palette (light wood, day theme) ──
 export const BOARD = {
   wood: '#E6C889',
   grain: 'rgba(150,110,45,0.20)',
@@ -22,6 +22,20 @@ export const BOARD = {
   label: '#6A5228',
   fretNum: '#8A6E3C',
 } as const;
+
+// ── Night palette (deep navy board, sky-blue accents) ──
+export const BOARD_NIGHT = {
+  wood: '#16243E',
+  grain: 'rgba(90,140,220,0.10)',
+  fret: '#3F5177',
+  string: '#8098C6',
+  nut: '#BFE3FF',
+  inlay: 'rgba(130,180,255,0.22)',
+  label: '#8FB0DE',
+  fretNum: '#6E92CC',
+} as const;
+
+export type BoardPalette = typeof BOARD;
 
 export const STRING_SETS: Record<StringSet, number[] | null> = {
   all: null,

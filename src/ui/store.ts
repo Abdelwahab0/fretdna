@@ -13,6 +13,7 @@ interface AppState {
   voicingView: boolean;
   shapeIndex: number;
   showGhost: boolean;
+  theme: 'day' | 'night';
   setRoot: (n: number) => void;
   setQuality: (q: string) => void;
   setMode: (m: Mode) => void;
@@ -23,6 +24,7 @@ interface AppState {
   setVoicingView: (b: boolean) => void;
   setShapeIndex: (i: number) => void;
   setShowGhost: (b: boolean) => void;
+  setTheme: (t: 'day' | 'night') => void;
 }
 
 export const useStore = create<AppState>((set) => ({
@@ -36,6 +38,7 @@ export const useStore = create<AppState>((set) => ({
   voicingView: false,
   shapeIndex: 0,
   showGhost: true,
+  theme: 'day',
   setRoot: (root) => set({ root }),
   setQuality: (quality) => set({ quality }),
   setMode: (mode) =>
@@ -47,4 +50,5 @@ export const useStore = create<AppState>((set) => ({
   setVoicingView: (voicingView) => set({ voicingView }),
   setShapeIndex: (shapeIndex) => set({ shapeIndex }),
   setShowGhost: (showGhost) => set({ showGhost }),
+  setTheme: (theme) => set({ theme }),
 }));

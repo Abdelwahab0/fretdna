@@ -1,50 +1,37 @@
-import { useEffect } from 'react';
-import ModeTabs from './ui/ModeTabs';
 import RootPicker from './ui/panels/RootPicker';
 import QualityPicker from './ui/panels/QualityPicker';
 import ShapeControls from './ui/panels/ShapeControls';
 import VoicingControls from './ui/panels/VoicingControls';
-import IntervalControls from './ui/panels/IntervalControls';
 import ChordInfo from './ui/ChordInfo';
 import Legend from './ui/Legend';
 import Fretboard from './ui/Fretboard';
 import { useStore } from './ui/store';
+import { useEffect } from 'react';
 
 export default function App() {
-  const { mode, showLabels, setShowLabels } = useStore();
+  const { showLabels, setShowLabels, theme, setTheme } = useStore();
 
   useEffect(() => {
-    document.body.dataset.mode = mode;
-  }, [mode]);
+    document.documentElement.dataset.theme = theme;
+  }, [theme]);
 
   return (
     <>
       <div id="hdr">
         <div id="logo">Fret<em>DNA</em></div>
-        <ModeTabs />
+        <button
+          id="theme-btn"
+          onClick={() => setTheme(theme === 'night' ? 'day' : 'night')}
+          title="Toggle night mode"
+        >
+          {theme === 'night' ? '☀ Day' : '☾ Night'}
+        </button>
       </div>
 
       <div id="main">
         <aside id="lp">
           <RootPicker />
-          {mode === 'shapes' ? (
-            <>
-              <QualityPicker />
-              <ShapeControls />
-              <VoicingControls />
-            </>
-          ) : (
-            <IntervalControls />
-          )}
-          <div className="sec">
-            <div className="tog-row">
-              <label className="tog">
-                <input type="checkbox" checked={showLabels} onChange={(e) => setShowLabels(e.target.checked)} />
-                <span className="tog-t" />
-              </label>
-              <span className="tog-l">Show intervals</span>
-            </div>
-          </div>
+          <QualityPicker />
         </aside>
 
         <div id="ctr">
@@ -54,6 +41,21 @@ export default function App() {
           </div>
           <Legend />
         </div>
+
+        <aside id="rp">
+          <VoicingControls />
+          <ShapeControls />
+          <div className="sec">
+            <div className="sec-label">Labels</div>
+            <div className="tog-row">
+              <label className="tog">
+                <input type="checkbox" checked={showLabels} onChange={(e) => setShowLabels(e.target.checked)} />
+                <span className="tog-t" />
+              </label>
+              <span className="tog-l">Interval names</span>
+            </div>
+          </div>
+        </aside>
       </div>
     </>
   );
