@@ -1,0 +1,4 @@
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Space Grotesk',sans-serif;background:#EDE7DC;color:#1A1208}
+#logo{font-size:17px;font-weight:600}
+#logo em{font-style:normal;color:#B06818}
