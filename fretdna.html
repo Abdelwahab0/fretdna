@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FretDNA</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#EDE7DC;
+  --panel:#FAFAF8;
+  --panel2:#F4F0E8;
+  --border:#DDD5C4;
+  --border2:#C8BC9A;
+  --text:#1A1208;
+  --dim:#7A6A52;
+  --mute:#B8AC94;
+  --accent:#B06818;
+  --accent-bg:rgba(176,104,24,.1);
+  --accent-border:rgba(176,104,24,.35);
+  --fb:#1C1006;
+  --fb2:#241408;
+  --fw:#7A5F18;
+  --str:#C8A860;
+  --nut:#ECD8A0;
+  --c-root:#E04808;
+  --c-3rd:#149A70;
+  --c-5th:#3A70B8;
+  --c-7th:#A028B0;
+  --c-ext:#6840C8;
+  --r:7px;--rs:5px;
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;height:100vh}
+button{font-family:'Space Grotesk',sans-serif;cursor:pointer;border:none;background:none}
+
+/* HEADER */
+#hdr{
+  display:flex;align-items:center;height:50px;padding:0 18px;
+  background:var(--panel);border-bottom:1px solid var(--border);
+  gap:16px;flex-shrink:0;
+}
+#logo{font-size:17px;font-weight:600;letter-spacing:-.5px;color:var(--text)}
+#logo em{font-style:normal;color:var(--accent)}
+#tabs{display:flex;gap:2px;background:var(--bg);padding:3px;border-radius:var(--r);border:1px solid var(--border)}
+.tab{padding:5px 16px;font-size:13px;font-weight:500;color:var(--dim);border-radius:var(--rs);transition:all .15s}
+.tab.on{background:var(--panel);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.tab:hover:not(.on){color:var(--text)}
+#hint{font-size:11px;color:var(--mute);margin-left:auto}
+
+/* MAIN */
+#main{display:flex;flex:1;overflow:hidden;min-height:0}
+
+/* LEFT PANEL */
+#lp{
+  width:196px;flex-shrink:0;
+  background:var(--panel);border-right:1px solid var(--border);
+  overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:16px
+}
+.sec{display:flex;flex-direction:column;gap:6px}
+.sec-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--mute)}
+
+/* Root grid */
+#root-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:3px}
+.rbtn{
+  padding:7px 2px;font-size:12px;font-weight:500;
+  font-family:'JetBrains Mono',monospace;
+  background:var(--panel2);border:1px solid var(--border);
+  color:var(--dim);border-radius:var(--rs);text-align:center;transition:all .12s
+}
+.rbtn.on{background:var(--c-root);border-color:var(--c-root);color:#fff;font-weight:600}
+.rbtn:hover:not(.on){border-color:var(--border2);color:var(--text)}
+
+/* Quality grid */
+#qual-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px}
+.qbtn{
+  padding:6px 4px;font-size:11px;font-weight:500;
+  font-family:'JetBrains Mono',monospace;
+  background:var(--panel2);border:1px solid var(--border);
+  color:var(--dim);border-radius:var(--rs);text-align:center;transition:all .12s
+}
+.qbtn.on{background:rgba(20,154,112,.1);border-color:var(--c-3rd);color:var(--c-3rd);font-weight:600}
+.qbtn:hover:not(.on){border-color:var(--border2);color:var(--text)}
+
+/* Filter buttons */
+.fbtn{
+  padding:6px 9px;font-size:11px;
+  background:var(--panel2);border:1px solid var(--border);
+  color:var(--dim);border-radius:var(--rs);text-align:left;transition:all .12s;width:100%
+}
+.fbtn.on{background:var(--accent-bg);border-color:var(--accent-border);color:var(--accent)}
+.fbtn:hover:not(.on){border-color:var(--border2);color:var(--text)}
+#ss-wrap,#vc-wrap,#iv-wrap{display:flex;flex-direction:column;gap:3px}
+
+/* Interval highlight grid */
+#iv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
+.ivbtn{
+  padding:5px 2px;font-size:11px;font-family:'JetBrains Mono',monospace;
+  background:var(--panel2);border:1px solid var(--border);
+  color:var(--dim);border-radius:var(--rs);text-align:center;transition:all .12s
+}
+.ivbtn.on{background:rgba(104,64,200,.1);border-color:var(--c-ext);color:var(--c-ext);font-weight:600}
+.ivbtn:hover:not(.on){border-color:var(--border2);color:var(--text)}
+
+/* Toggle */
+.tog-row{display:flex;align-items:center;gap:8px}
+.tog{position:relative;width:34px;height:19px;flex-shrink:0;cursor:pointer}
+.tog input{opacity:0;width:0;height:0}
+.tog-t{position:absolute;inset:0;background:var(--border2);border-radius:10px;transition:background .2s}
+.tog-t::after{content:'';position:absolute;left:2px;top:2px;width:15px;height:15px;background:#fff;border-radius:50%;transition:transform .18s;box-shadow:0 1px 2px rgba(0,0,0,.25)}
+.tog input:checked+.tog-t{background:var(--c-3rd)}
+.tog input:checked+.tog-t::after{transform:translateX(15px)}
+.tog-l{font-size:12px;color:var(--dim)}
+
+/* Mode sections */
+.shapes-sec,.intervals-sec{display:flex;flex-direction:column;gap:16px}
+body[data-mode=intervals] .shapes-sec{display:none}
+body[data-mode=shapes] .intervals-sec{display:none}
+
+/* CENTER */
+#ctr{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:14px 18px;gap:10px;overflow:hidden;min-width:0
+}
+
+/* Chord info */
+#cinfo{
+  display:flex;align-items:center;gap:12px;
+  padding:8px 14px;
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:var(--r);width:100%;max-width:940px
+}
+#cname{
+  font-size:21px;font-weight:600;
+  font-family:'JetBrains Mono',monospace;
+  color:var(--text);min-width:100px
+}
+#ctones{display:flex;gap:5px;flex-wrap:wrap}
+.chip{
+  padding:2px 9px;border-radius:20px;
+  font-size:11px;font-family:'JetBrains Mono',monospace;font-weight:500;
+  display:flex;align-items:center;gap:4px
+}
+.chip-root{background:rgba(224,72,8,.1);color:var(--c-root);border:1px solid rgba(224,72,8,.25)}
+.chip-3rd {background:rgba(20,154,112,.1);color:var(--c-3rd);border:1px solid rgba(20,154,112,.25)}
+.chip-5th {background:rgba(58,112,184,.1);color:var(--c-5th);border:1px solid rgba(58,112,184,.25)}
+.chip-7th {background:rgba(160,40,176,.1);color:var(--c-7th);border:1px solid rgba(160,40,176,.25)}
+.chip-ext {background:rgba(104,64,200,.1);color:var(--c-ext);border:1px solid rgba(104,64,200,.25)}
+
+/* Fretboard */
+#fb-wrap{width:100%;max-width:940px}
+#fb{width:100%;height:auto;display:block}
+
+/* Dot bloom */
+@keyframes bloom{from{opacity:0;transform:scale(.15)}to{opacity:1;transform:scale(1)}}
+.nd{animation:bloom .2s ease-out both}
+
+/* Legend */
+#legend{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim)}
+.leg-dot{width:11px;height:11px;border-radius:50%}
+
+/* RIGHT PANEL */
+#rp{
+  width:272px;flex-shrink:0;
+  background:var(--panel);border-left:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden
+}
+#ptabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
+.ptab{
+  flex:1;padding:10px;font-size:12px;font-weight:500;
+  text-align:center;background:none;color:var(--dim);
+  border-bottom:2px solid transparent;transition:all .15s
+}
+.ptab.on{color:var(--accent);border-bottom-color:var(--accent)}
+#sfilt{
+  display:flex;gap:4px;padding:8px 10px;
+  overflow-x:auto;flex-shrink:0;border-bottom:1px solid var(--border)
+}
+.spill{
+  padding:3px 9px;font-size:11px;font-weight:500;
+  background:var(--panel2);border:1px solid var(--border);
+  color:var(--dim);border-radius:20px;white-space:nowrap;transition:all .12s
+}
+.spill.on{background:var(--accent);border-color:var(--accent);color:#fff}
+#plist{overflow-y:auto;flex:1}
+.pi{padding:10px 11px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s}
+.pi:hover{background:var(--panel2)}
+.pi.on{background:var(--accent-bg);border-left:2px solid var(--accent);padding-left:9px}
+.pi-h{display:flex;align-items:flex-start;justify-content:space-between;gap:6px;margin-bottom:2px}
+.pi-title{font-size:12px;font-weight:500;color:var(--text);flex:1}
+.pi-tag{font-size:10px;padding:2px 5px;border-radius:3px;background:var(--accent-bg);color:var(--accent);font-weight:600;white-space:nowrap;flex-shrink:0}
+.pi-chords{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--c-3rd);margin-bottom:3px}
+.pi-dna{font-size:10.5px;color:var(--dim);line-height:1.5}
+.dna-tag{font-size:9px;font-weight:600;letter-spacing:.5px;color:var(--c-ext);margin-right:3px;text-transform:uppercase}
+
+/* LOOP STRIP */
+#loop{
+  height:56px;display:flex;align-items:center;
+  padding:0 16px;gap:10px;
+  border-top:1px solid var(--border);background:var(--panel);flex-shrink:0;overflow-x:auto
+}
+#loop-lbl{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--mute);flex-shrink:0}
+#loop-chips{display:flex;gap:5px;flex:1;overflow-x:auto}
+.lc{
+  padding:5px 12px;font-size:11px;font-family:'JetBrains Mono',monospace;font-weight:500;
+  background:var(--panel2);border:1px solid var(--border);
+  color:var(--dim);border-radius:var(--rs);white-space:nowrap;transition:all .12s
+}
+.lc.on{background:var(--accent-bg);border-color:var(--accent-border);color:var(--accent);font-weight:600}
+.lc:hover:not(.on){border-color:var(--border2);color:var(--text)}
+#lctrl{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.lb{
+  width:30px;height:30px;background:var(--panel2);border:1px solid var(--border);
+  color:var(--dim);border-radius:var(--rs);display:flex;align-items:center;justify-content:center;
+  font-size:14px;transition:all .12s
+}
+.lb:hover{border-color:var(--accent);color:var(--accent)}
+.lb.on{background:var(--accent-bg);border-color:var(--accent-border);color:var(--accent)}
+#pulse{width:7px;height:7px;border-radius:50%;background:var(--border2);transition:background .08s;flex-shrink:0}
+#pulse.beat{background:var(--accent)}
+
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+</style>
+</head>
+<body data-mode="shapes">
+
+<div id="hdr">
+  <div id="logo">Fret<em>DNA</em></div>
+  <div id="tabs">
+    <button class="tab on" data-m="shapes">Shapes</button>
+    <button class="tab" data-m="intervals">Intervals</button>
+  </div>
+  <div id="hint">← → chords &nbsp;·&nbsp; space = loop</div>
+</div>
+
+<div id="main">
+
+<aside id="lp">
+  <div class="sec">
+    <div class="sec-label">Root</div>
+    <div id="root-grid"></div>
+  </div>
+
+  <div class="shapes-sec">
+    <div class="sec">
+      <div class="sec-label">Quality</div>
+      <div id="qual-grid"></div>
+    </div>
+    <div class="sec">
+      <div class="sec-label">String Set</div>
+      <div id="ss-wrap"></div>
+    </div>
+    <div class="sec">
+      <div class="sec-label">Voicing</div>
+      <div id="vc-wrap"></div>
+    </div>
+  </div>
+
+  <div class="intervals-sec">
+    <div class="sec">
+      <div class="sec-label">Highlight</div>
+      <div id="iv-wrap">
+        <div id="iv-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="tog-row">
+      <label class="tog">
+        <input type="checkbox" id="tog-lbl" checked>
+        <span class="tog-t"></span>
+      </label>
+      <span class="tog-l">Show intervals</span>
+    </div>
+  </div>
+</aside>
+
+<div id="ctr">
+  <div id="cinfo">
+    <div id="cname">Cmaj7</div>
+    <div id="ctones"></div>
+  </div>
+  <div id="fb-wrap">
+    <svg id="fb" viewBox="0 0 1000 190" xmlns="http://www.w3.org/2000/svg"></svg>
+  </div>
+  <div id="legend"></div>
+</div>
+
+<aside id="rp">
+  <div id="ptabs">
+    <button class="ptab on" data-pt="featured">Featured</button>
+    <button class="ptab" data-pt="library">Library</button>
+  </div>
+  <div id="sfilt"></div>
+  <div id="plist"></div>
+</aside>
+
+</div>
+
+<div id="loop">
+  <div id="loop-lbl">Loop</div>
+  <div id="loop-chips"><span style="font-size:11px;color:var(--mute)">Pick a progression →</span></div>
+  <div id="lctrl">
+    <div id="pulse"></div>
+    <button class="lb" id="btn-prev">‹</button>
+    <button class="lb" id="btn-next">›</button>
+    <button class="lb" id="btn-loop">⟳</button>
+  </div>
+</div>
+
+<script>
+// ── THEORY ─────────────────────────────────────
+const NOTES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+// Standard tuning, strings 0-5 = high e → low E
+const TUNING = [4, 11, 7, 2, 9, 4];
+const S_NAMES = ['e','B','G','D','A','E'];
+
+const QTYPES = {
+  maj:   {i:[0,4,7],      l:'maj',   g:0},
+  min:   {i:[0,3,7],      l:'min',   g:0},
+  dim:   {i:[0,3,6],      l:'dim',   g:0},
+  aug:   {i:[0,4,8],      l:'aug',   g:0},
+  maj7:  {i:[0,4,7,11],   l:'maj7',  g:1},
+  m7:    {i:[0,3,7,10],   l:'m7',    g:1},
+  dom7:  {i:[0,4,7,10],   l:'7',     g:1},
+  m7b5:  {i:[0,3,6,10],   l:'m7b5',  g:1},
+  dim7:  {i:[0,3,6,9],    l:'dim7',  g:1},
+  maj9:  {i:[0,4,7,11,2], l:'maj9',  g:2},
+  m9:    {i:[0,3,7,10,2], l:'m9',    g:2},
+  dom9:  {i:[0,4,7,10,2], l:'9',     g:2},
+  s9:    {i:[0,4,7,10,3], l:'7#9',   g:2},
+  sus2:  {i:[0,2,7],      l:'sus2',  g:3},
+  sus4:  {i:[0,5,7],      l:'sus4',  g:3},
+  add9:  {i:[0,4,7,2],    l:'add9',  g:3},
+};
+
+const INAMES = {0:'R',1:'b2',2:'9',3:'b3',4:'3',5:'4',6:'b5',7:'5',8:'#5',9:'6',10:'b7',11:'Δ7'};
+
+const ICOLORS = {
+  0:'#E04808', // root
+  1:'#6840C8', // b2
+  2:'#6840C8', // 9
+  3:'#149A70', // b3
+  4:'#149A70', // 3
+  5:'#6840C8', // 4
+  6:'#3A70B8', // b5
+  7:'#3A70B8', // 5
+  8:'#3A70B8', // #5
+  9:'#6840C8', // 6
+  10:'#A028B0',// b7
+  11:'#A028B0',// Δ7
+};
+
+function iChipClass(s){
+  if(s===0) return 'chip-root';
+  if(s===3||s===4) return 'chip-3rd';
+  if(s===6||s===7||s===8) return 'chip-5th';
+  if(s===10||s===11) return 'chip-7th';
+  return 'chip-ext';
+}
+
+const STRING_SETS = {
+  all: null,
+  '123': [0,1,2],
+  '234': [1,2,3],
+  '345': [2,3,4],
+  '456': [3,4,5],
+};
+
+// ── PROGRESSIONS ────────────────────────────────
+function C(r,q){
+  const ri = NOTES.indexOf(r);
+  const ql = QTYPES[q]?.l || q;
+  return {root:ri, quality:q, label: r+ql};
+}
+
+const FEATURED = [
+  {id:'f1',title:'Neo-Soul I→IV Float',style:'Neo-Soul',
+   chords:[C('C','maj9'),C('F','maj9')],
+   dna:'The E (3rd of C) becomes the maj7 of F. Same note, two identities — that shared tone is what makes this progression float.'},
+  {id:'f2',title:'Gravity Vamp',style:'Mayer',
+   chords:[C('G','maj7'),C('C','add9')],
+   dna:'I→IV with extensions. The B (3rd of G) floats as the maj7 of C. Resolution that never fully lands.'},
+  {id:'f3',title:'Purple Haze Chord',style:'Hendrix',
+   chords:[C('E','s9')],
+   dna:'The #9 (G natural) clashes with the 3rd (G#). Major and minor at once. Maximum tension, minimum movement.'},
+  {id:'f4',title:'Neo-Soul ii–V–I',style:'Neo-Soul',
+   chords:[C('D','m9'),C('G','dom9'),C('C','maj9')],
+   dna:'Jazz backbone with extensions. The 9 on ii creates melodic tension that folds beautifully into Imaj9.'},
+  {id:'f5',title:'D\'Angelo Drift',style:'Neo-Soul',
+   chords:[C('E','maj9'),C('D','maj7'),C('A','maj9')],
+   dna:'Borrowed bVII gives it a modal quality. Dmaj7 doesn\'t belong in E major but sounds inevitable.'},
+  {id:'f6',title:'Funk One-Chord Vamp',style:'Funk',
+   chords:[C('E','dom9')],
+   dna:'One chord. All the work is rhythmic. The 9th (F#) adds shimmer without shifting the harmonic center.'},
+  {id:'f7',title:'Little Wing',style:'Hendrix',
+   chords:[C('E','min'),C('G','maj'),C('A','maj'),C('C','maj'),C('D','sus2')],
+   dna:'Guitar acts like a whole band. The Dsus2 is the signature suspension before the cycle repeats.'},
+  {id:'f8',title:'Neon Progression',style:'Mayer',
+   chords:[C('B','m7'),C('E','dom7'),C('A','maj7'),C('D','maj')],
+   dna:'ii→V→I→IV in A. The E7→Amaj7 is the emotional core — tension folding into warmth every cycle.'},
+  {id:'f9',title:'Funk ii–V Loop',style:'Funk',
+   chords:[C('A','m9'),C('D','dom9')],
+   dna:'Looping ii-V. Add rhythmic displacement and you have the foundation of 70s funk guitar.'},
+  {id:'f10',title:'iii–VI–ii–V Descent',style:'Neo-Soul',
+   chords:[C('E','m7'),C('A','m7'),C('D','m7'),C('G','dom7')],
+   dna:'Each chord is the ii of the next. Spirals inward before resolving to the dominant.'},
+  {id:'f11',title:'Hey Joe Walk',style:'Hendrix',
+   chords:[C('C','maj'),C('G','maj'),C('D','maj'),C('A','maj'),C('E','maj')],
+   dna:'bVI→bIII→bVII→IV→I. Each chord a perfect 5th down. Pure harmonic gravity.'},
+  {id:'f12',title:'Slow Dancing',style:'Mayer',
+   chords:[C('E','m7'),C('A','dom7'),C('D','maj7'),C('G','maj')],
+   dna:'ii→V→I→IV in D. The A7→Dmaj7 resolution is where the emotion lives.'},
+  {id:'f13',title:'Californication Loop',style:'Frusciante',
+   chords:[C('A','min'),C('F','maj'),C('C','maj'),C('G','maj')],
+   dna:'vi→IV→I→V. Am gives emotional weight, G creates perpetual resolution hunger.'},
+  {id:'f14',title:'Tritone Sub Move',style:'Neo-Soul',
+   chords:[C('C','maj7'),C('C#','dom7'),C('F','maj7')],
+   dna:'Db7 substitutes for G7 (tritone away). Its 3rd (F) becomes the root of Fmaj7. Chromatic bass, same function.'},
+  {id:'f15',title:'Mixolydian Funk',style:'Funk',
+   chords:[C('G','dom7'),C('F','maj'),C('G','dom7')],
+   dna:'The bVII (F) adds mixolydian flavor. B in G7 moves to Bb then back. Earthy, forever repeatable.'},
+  {id:'f16',title:'Bold as Love',style:'Hendrix',
+   chords:[C('A','maj'),C('B','maj'),C('F#','min'),C('D','maj'),C('E','maj')],
+   dna:'The borrowed II (B major instead of Bm) brightens the progression unexpectedly.'},
+  {id:'f17',title:'Sus2 Landscape',style:'Neo-Soul',
+   chords:[C('D','sus2'),C('A','sus2'),C('E','sus2')],
+   dna:'No 3rd in any chord — major/minor ambiguity permanently suspended. The whole thing floats.'},
+  {id:'f18',title:'Under the Bridge',style:'Frusciante',
+   chords:[C('D','maj'),C('F#','min'),C('E','maj'),C('A','maj'),C('G','maj')],
+   dna:'The F#m as III adds depth before lifting to E. G at the end stretches the modal picture wide.'},
+  {id:'f19',title:'Parallel Dominants',style:'Hendrix',
+   chords:[C('D','s9'),C('G','s9')],
+   dna:'Parallel 7#9 chords a 4th apart. No tonal center — pure energy and grit.'},
+  {id:'f20',title:'By The Way Lift',style:'Frusciante',
+   chords:[C('F','maj7'),C('A#','maj'),C('C','maj')],
+   dna:'Imaj7→bVII→I: the bVII movement gives that lifted quality before resolving.'},
+];
+
+const LIBRARY = [
+  {id:'l1',style:'Funk',title:'I–IV Funk Vamp',chords:[C('A','dom7'),C('D','dom7')],dna:null},
+  {id:'l2',style:'Neo-Soul',title:'Minor ii–V–i',chords:[C('B','m7b5'),C('E','dom7'),C('A','min')],dna:null},
+  {id:'l3',style:'Funk',title:'Dorian Vamp',chords:[C('D','m7'),C('G','dom7')],dna:null},
+  {id:'l4',style:'Hendrix',title:'I–bVII–IV–I',chords:[C('A','maj'),C('G','maj'),C('D','maj'),C('A','maj')],dna:null},
+  {id:'l5',style:'Mayer',title:'I–V–vi–IV',chords:[C('D','maj'),C('A','maj'),C('B','min'),C('G','maj')],dna:null},
+  {id:'l6',style:'Neo-Soul',title:'Drop 2 Shell Loop',chords:[C('F','maj7'),C('E','m7'),C('D','m7'),C('G','dom7')],dna:null},
+  {id:'l7',style:'Frusciante',title:'RHCP Minor Loop',chords:[C('E','min'),C('F','maj'),C('G','maj')],dna:null},
+  {id:'l8',style:'Funk',title:'Chicken Scratch',chords:[C('G','dom9'),C('C','dom9')],dna:null},
+  {id:'l9',style:'Neo-Soul',title:'Modal Float',chords:[C('E','m9'),C('A','maj9'),C('D','maj9')],dna:null},
+  {id:'l10',style:'Mayer',title:'Lydian Lift',chords:[C('D','maj7'),C('E','maj'),C('D','maj7')],dna:null},
+  {id:'l11',style:'Hendrix',title:'Phrygian Dom',chords:[C('E','dom7'),C('F','maj'),C('E','dom7')],dna:null},
+  {id:'l12',style:'Neo-Soul',title:'Soul ii–V',chords:[C('C','m9'),C('F','dom9'),C('A#','maj9')],dna:null},
+  {id:'l13',style:'Hendrix',title:'Classic 12-Bar',chords:[C('A','dom7'),C('D','dom7'),C('A','dom7'),C('E','dom7')],dna:null},
+  {id:'l14',style:'Frusciante',title:'Higher Ground',chords:[C('D#','min'),C('G#','maj'),C('A#','maj')],dna:null},
+  {id:'l15',style:'Funk',title:'Scofield Dorian',chords:[C('G','m9'),C('C','dom9')],dna:null},
+  {id:'l16',style:'Mayer',title:'vi–IV–I–V',chords:[C('A','min'),C('F','maj'),C('C','maj'),C('G','maj')],dna:null},
+  {id:'l17',style:'Neo-Soul',title:'Dim Turnaround',chords:[C('C','maj7'),C('C#','dim7'),C('D','m7'),C('G','dom7')],dna:null},
+  {id:'l18',style:'Funk',title:'One Drop',chords:[C('A','maj'),C('D','maj'),C('E','maj')],dna:null},
+  {id:'l19',style:'Hendrix',title:'E Blues',chords:[C('E','dom7'),C('A','dom7'),C('B','dom7')],dna:null},
+  {id:'l20',style:'Mayer',title:'Peaceful Walk',chords:[C('G','maj'),C('D','maj'),C('A','m7'),C('C','maj')],dna:null},
+];
+
+// ── STATE ───────────────────────────────────────
+const S = {
+  root: 0,
+  quality: 'maj7',
+  mode: 'shapes',
+  showLabels: true,
+  stringSet: 'all',
+  voicing: 'standard',
+  hlInterval: 0,
+  prog: null,
+  chordIdx: 0,
+  progTab: 'featured',
+  styleFilter: 'All',
+  looping: false,
+  loopTimer: null,
+};
+
+// ── FRETBOARD ENGINE ────────────────────────────
+const VW=1000, VH=190, LW=40, NX=40, OW=46, FMAX=15;
+const PT=20, PB=24, SC=6;
+const SS = (VH - PT - PB) / (SC - 1); // string spacing
+const FAW = VW - NX - OW - 4;
+const FW = FAW / FMAX;
+const INLAYS = [3,5,7,9,12,15];
+
+function sy(s){ return PT + s * SS; }
+function fcx(f){ return f === 0 ? NX + OW/2 : NX + OW + (f-1)*FW + FW/2; }
+function flx(f){ return NX + OW + f * FW; }
+
+function svgEl(tag, attrs){
+  const e = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for(const [k,v] of Object.entries(attrs)) e.setAttribute(k, v);
+  return e;
+}
+function svgTxt(x, y, sz, attrs){
+  return svgEl('text', {x, y, 'text-anchor':'middle', 'font-size':sz, 'font-family':'JetBrains Mono,monospace', ...attrs});
+}
+
+function drawBoard(){
+  const svg = document.getElementById('fb');
+  svg.innerHTML = '';
+
+  // Wood bg
+  svg.appendChild(svgEl('rect',{x:NX,y:0,width:VW-NX,height:VH,fill:'#1C1006'}));
+  // Grain lines
+  for(let i=0;i<12;i++){
+    const y = (VH/12)*i + 1;
+    svg.appendChild(svgEl('line',{x1:NX,y1:y,x2:VW,y2:y,stroke:'#231408','stroke-width':'1.2',opacity:'0.55'}));
+  }
+
+  // Position inlays
+  for(const f of INLAYS){
+    const cx = flx(f-1) + FW/2;
+    const my = PT + (SC-1)*SS/2;
+    if(f === 12){
+      const g = SS * 0.9;
+      svg.appendChild(svgEl('circle',{cx,cy:my-g/2,r:4.5,fill:'rgba(210,175,100,.16)'}));
+      svg.appendChild(svgEl('circle',{cx,cy:my+g/2,r:4.5,fill:'rgba(210,175,100,.16)'}));
+    } else {
+      svg.appendChild(svgEl('circle',{cx,cy:my,r:4.5,fill:'rgba(210,175,100,.16)'}));
+    }
+  }
+
+  // Strings
+  const SW = [0.55,0.7,0.9,1.1,1.35,1.6];
+  for(let s=0;s<SC;s++){
+    svg.appendChild(svgEl('line',{
+      x1:NX,y1:sy(s),x2:VW-2,y2:sy(s),
+      stroke:'#C8A860','stroke-width':SW[s],opacity:'0.6'
+    }));
+  }
+
+  // Nut
+  svg.appendChild(svgEl('rect',{x:NX,y:PT-5,width:5,height:(SC-1)*SS+10,fill:'#ECD8A0',rx:'1'}));
+
+  // Fret lines
+  for(let f=1;f<=FMAX;f++){
+    svg.appendChild(svgEl('line',{
+      x1:flx(f),y1:PT-2,x2:flx(f),y2:VH-PB+2,
+      stroke:'#7A5F18','stroke-width':'1.4'
+    }));
+  }
+
+  // String labels
+  for(let s=0;s<SC;s++){
+    const t = svgTxt(LW-4, sy(s)+4, 11, {'text-anchor':'end', fill:'#6A5030'});
+    t.textContent = S_NAMES[s];
+    svg.appendChild(t);
+  }
+
+  // Fret numbers
+  for(let f=1;f<=FMAX;f+=2){
+    const t = svgTxt(fcx(f), VH-5, 9, {fill:'#4A3818'});
+    t.textContent = f;
+    svg.appendChild(t);
+  }
+  // Open label
+  const ot = svgTxt(fcx(0), VH-5, 9, {fill:'#4A3818'});
+  ot.textContent = 'O'; svg.appendChild(ot);
+
+  drawDots(svg);
+}
+
+function getChordIntervals(){
+  const q = QTYPES[S.quality];
+  if(!q) return [];
+  let ivs = [...q.i];
+  if(S.voicing === 'shell')    ivs = ivs.filter(i => [3,4,10,11].includes(i));
+  if(S.voicing === 'rootless') ivs = ivs.filter(i => i !== 0);
+  return ivs;
+}
+
+function getDots(){
+  const dots = [];
+  if(S.mode === 'intervals'){
+    for(let s=0;s<SC;s++){
+      for(let f=0;f<=FMAX;f++){
+        const note = (TUNING[s]+f) % 12;
+        const semi = (note - S.root + 12) % 12;
+        if(semi === S.hlInterval) dots.push({s,f,semi,note,delay:0});
+      }
+    }
+  } else {
+    const ivs = getChordIntervals();
+    const iSet = new Set(ivs);
+    const strSet = STRING_SETS[S.stringSet];
+    for(let s=0;s<SC;s++){
+      if(strSet && !strSet.includes(s)) continue;
+      for(let f=0;f<=FMAX;f++){
+        const note = (TUNING[s]+f) % 12;
+        const semi = (note - S.root + 12) % 12;
+        if(iSet.has(semi)){
+          dots.push({s,f,semi,note,delay: ivs.indexOf(semi)*55});
+        }
+      }
+    }
+  }
+  return dots;
+}
+
+function drawDots(svg){
+  for(const {s,f,semi,note,delay} of getDots()){
+    const cx = fcx(f), cy = sy(s);
+    const color = ICOLORS[semi] || '#888';
+    const r = semi === 0 ? 13 : 11;
+
+    const outer = svgEl('g', {transform:`translate(${cx},${cy})`});
+    const inner = svgEl('g', {class:'nd', style:`animation-delay:${delay}ms`});
+
+    inner.appendChild(svgEl('circle',{cx:0,cy:0,r,fill:color,opacity: semi===0?'1':'0.9'}));
+    if(semi===0){
+      inner.appendChild(svgEl('circle',{cx:0,cy:0,r:r+3.5,fill:'none',stroke:color,'stroke-width':'1.5',opacity:'0.3'}));
+    }
+    const lbl = svgTxt(0, 4, semi===0?'9':'8', {fill:'#fff','font-weight':'500'});
+    lbl.textContent = S.showLabels ? INAMES[semi] : NOTES[note];
+    inner.appendChild(lbl);
+
+    outer.appendChild(inner);
+    svg.appendChild(outer);
+  }
+}
+
+// ── CHORD INFO BAR ──────────────────────────────
+function updateInfo(){
+  const rn = NOTES[S.root];
+  const ql = S.mode === 'intervals'
+    ? INAMES[S.hlInterval] + ' intervals'
+    : (QTYPES[S.quality]?.l || S.quality);
+  document.getElementById('cname').textContent = rn + ql;
+
+  const tw = document.getElementById('ctones');
+  tw.innerHTML = '';
+  if(S.mode === 'shapes'){
+    getChordIntervals().forEach(semi => {
+      const ni = (S.root + semi) % 12;
+      const chip = document.createElement('div');
+      chip.className = 'chip ' + iChipClass(semi);
+      chip.innerHTML = `<span style="font-size:9px;opacity:.6">${INAMES[semi]}</span> ${NOTES[ni]}`;
+      tw.appendChild(chip);
+    });
+  }
+}
+
+// ── BUILD LEFT PANEL ────────────────────────────
+function buildRoots(){
+  const g = document.getElementById('root-grid');
+  NOTES.forEach((n,i) => {
+    const b = document.createElement('button');
+    b.className = 'rbtn'; b.textContent = n; b.dataset.i = i;
+    b.onclick = () => { S.root = i; refresh(); };
+    g.appendChild(b);
+  });
+}
+
+function buildQualities(){
+  const g = document.getElementById('qual-grid');
+  Object.entries(QTYPES).forEach(([k,v]) => {
+    const b = document.createElement('button');
+    b.className = 'qbtn'; b.textContent = v.l; b.dataset.q = k;
+    b.onclick = () => { S.quality = k; refresh(); };
+    g.appendChild(b);
+  });
+}
+
+function buildStringSets(){
+  const w = document.getElementById('ss-wrap');
+  [['all','All strings'],['123','Strings 1-2-3  (e B G)'],['234','Strings 2-3-4  (B G D)'],['345','Strings 3-4-5  (G D A)'],['456','Strings 4-5-6  (D A E)']].forEach(([v,l]) => {
+    const b = document.createElement('button');
+    b.className = 'fbtn'; b.textContent = l; b.dataset.ss = v;
+    b.onclick = () => { S.stringSet = v; refresh(); };
+    w.appendChild(b);
+  });
+}
+
+function buildVoicings(){
+  const w = document.getElementById('vc-wrap');
+  [['standard','Standard'],['shell','Shell (3 + 7)'],['rootless','Rootless']].forEach(([v,l]) => {
+    const b = document.createElement('button');
+    b.className = 'fbtn'; b.textContent = l; b.dataset.vc = v;
+    b.onclick = () => { S.voicing = v; refresh(); };
+    w.appendChild(b);
+  });
+}
+
+function buildIntervalGrid(){
+  const g = document.getElementById('iv-grid');
+  [[null,'All'],[0,'R'],[2,'9'],[3,'b3'],[4,'3'],[5,'4'],[6,'b5'],[7,'5'],[8,'#5'],[9,'6'],[10,'b7'],[11,'Δ7']].forEach(([v,l]) => {
+    const b = document.createElement('button');
+    b.className = 'ivbtn'; b.textContent = l; b.dataset.iv = v === null ? 'all' : v;
+    b.onclick = () => {
+      S.hlInterval = v === null ? 0 : v;
+      if(v === null){ S.hlInterval = null; }
+      refresh();
+    };
+    g.appendChild(b);
+  });
+}
+
+// ── BUILD RIGHT PANEL ───────────────────────────
+function buildStyleFilter(){
+  const w = document.getElementById('sfilt');
+  ['All','Neo-Soul','Funk','Hendrix','Mayer','Frusciante'].forEach(s => {
+    const b = document.createElement('button');
+    b.className = 'spill'; b.textContent = s; b.dataset.sf = s;
+    b.onclick = () => { S.styleFilter = s; renderProgs(); };
+    w.appendChild(b);
+  });
+}
+
+function renderProgs(){
+  const list = document.getElementById('plist');
+  list.innerHTML = '';
+  const src = S.progTab === 'featured' ? FEATURED : LIBRARY;
+  const items = S.styleFilter === 'All' ? src : src.filter(p => p.style === S.styleFilter);
+
+  document.querySelectorAll('.spill').forEach(b => b.classList.toggle('on', b.dataset.sf === S.styleFilter));
+
+  items.forEach(prog => {
+    const el = document.createElement('div');
+    el.className = 'pi' + (S.prog?.id === prog.id ? ' on' : '');
+    const cs = prog.chords.map(c => c.label).join(' → ');
+    el.innerHTML = `<div class="pi-h"><div class="pi-title">${prog.title}</div><div class="pi-tag">${prog.style}</div></div><div class="pi-chords">${cs}</div>${prog.dna?`<div class="pi-dna"><span class="dna-tag">DNA </span>${prog.dna}</div>`:''}`;
+    el.onclick = () => { S.prog = prog; S.chordIdx = 0; loadChord(prog.chords[0]); renderProgs(); renderLoop(); };
+    list.appendChild(el);
+  });
+}
+
+function renderLoop(){
+  const w = document.getElementById('loop-chips');
+  w.innerHTML = '';
+  if(!S.prog){
+    w.innerHTML = '<span style="font-size:11px;color:var(--mute)">Pick a progression →</span>';
+    return;
+  }
+  S.prog.chords.forEach((c,i) => {
+    const b = document.createElement('button');
+    b.className = 'lc' + (i === S.chordIdx ? ' on' : '');
+    b.textContent = c.label;
+    b.onclick = () => { S.chordIdx = i; loadChord(c); renderLoop(); };
+    w.appendChild(b);
+  });
+}
+
+function loadChord(c){ S.root = c.root; S.quality = c.quality; refresh(); }
+
+// ── REFRESH ─────────────────────────────────────
+function syncUI(){
+  document.querySelectorAll('.rbtn').forEach(b => b.classList.toggle('on', +b.dataset.i === S.root));
+  document.querySelectorAll('.qbtn').forEach(b => b.classList.toggle('on', b.dataset.q === S.quality));
+  document.querySelectorAll('#ss-wrap .fbtn').forEach(b => b.classList.toggle('on', b.dataset.ss === S.stringSet));
+  document.querySelectorAll('#vc-wrap .fbtn').forEach(b => b.classList.toggle('on', b.dataset.vc === S.voicing));
+  document.querySelectorAll('.ivbtn').forEach(b => {
+    const v = b.dataset.iv === 'all' ? null : +b.dataset.iv;
+    b.classList.toggle('on', v === S.hlInterval);
+  });
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('on', b.dataset.m === S.mode));
+  document.querySelectorAll('.ptab').forEach(b => b.classList.toggle('on', b.dataset.pt === S.progTab));
+}
+
+function refresh(){ drawBoard(); updateInfo(); syncUI(); }
+
+// ── MODE SWITCH ─────────────────────────────────
+function setMode(m){
+  S.mode = m;
+  document.body.dataset.mode = m;
+  if(m === 'intervals' && S.hlInterval === null) S.hlInterval = 0;
+  refresh();
+}
+
+// ── LOOP ────────────────────────────────────────
+function advance(d){
+  if(!S.prog) return;
+  const len = S.prog.chords.length;
+  S.chordIdx = (S.chordIdx + d + len) % len;
+  loadChord(S.prog.chords[S.chordIdx]);
+  renderLoop();
+}
+
+let pulsing = false;
+function doPulse(){
+  if(!S.looping){ pulsing = false; return; }
+  const p = document.getElementById('pulse');
+  p.classList.add('beat');
+  setTimeout(() => p.classList.remove('beat'), 80);
+  setTimeout(doPulse, 60000 / 72);
+}
+
+function toggleLoop(){
+  S.looping = !S.looping;
+  document.getElementById('btn-loop').classList.toggle('on', S.looping);
+  if(S.looping){
+    if(!pulsing){ pulsing = true; doPulse(); }
+    S.loopTimer = setInterval(() => advance(1), (60000/72)*4);
+  } else {
+    clearInterval(S.loopTimer);
+  }
+}
+
+// ── LEGEND ──────────────────────────────────────
+function buildLegend(){
+  const w = document.getElementById('legend');
+  [['#E04808','Root'],['#149A70','3rd'],['#3A70B8','5th'],['#A028B0','7th'],['#6840C8','Extension']].forEach(([c,l]) => {
+    const d = document.createElement('div');
+    d.className = 'leg';
+    d.innerHTML = `<div class="leg-dot" style="background:${c}"></div><span>${l}</span>`;
+    w.appendChild(d);
+  });
+}
+
+// ── INIT ────────────────────────────────────────
+function init(){
+  buildRoots(); buildQualities(); buildStringSets(); buildVoicings();
+  buildIntervalGrid(); buildStyleFilter(); buildLegend();
+  renderProgs(); renderLoop();
+
+  document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => setMode(b.dataset.m)));
+  document.querySelectorAll('.ptab').forEach(b => b.addEventListener('click', () => {
+    S.progTab = b.dataset.pt;
+    renderProgs();
+  }));
+  document.getElementById('tog-lbl').addEventListener('change', e => {
+    S.showLabels = e.target.checked; refresh();
+  });
+  document.getElementById('btn-prev').addEventListener('click', () => advance(-1));
+  document.getElementById('btn-next').addEventListener('click', () => advance(1));
+  document.getElementById('btn-loop').addEventListener('click', toggleLoop);
+
+  document.addEventListener('keydown', e => {
+    if(e.key === 'ArrowRight'){ e.preventDefault(); advance(1); }
+    if(e.key === 'ArrowLeft'){ e.preventDefault(); advance(-1); }
+    if(e.key === ' '){ e.preventDefault(); toggleLoop(); }
+  });
+
+  refresh();
+}
+
+init();
+</script>
+</body>
+</html>
