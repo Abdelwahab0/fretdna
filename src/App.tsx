@@ -1,5 +1,6 @@
 import RootPicker from './ui/panels/RootPicker';
 import QualityPicker from './ui/panels/QualityPicker';
+import DiatonicTriads from './ui/panels/DiatonicTriads';
 import ShapeControls from './ui/panels/ShapeControls';
 import VoicingControls from './ui/panels/VoicingControls';
 import ChordInfo from './ui/ChordInfo';
@@ -32,6 +33,7 @@ export default function App() {
         <aside id="lp">
           <RootPicker />
           <QualityPicker />
+          <DiatonicTriads />
         </aside>
 
         <div id="ctr">
