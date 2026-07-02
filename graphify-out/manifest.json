@@ -1,0 +1,17 @@
+{
+  ".claude/settings.local.json": {
+    "mtime": 1782957092.4790702,
+    "ast_hash": "07d81f274fcf58c5850a1536e0acf6e7",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md": {
+    "mtime": 1782957055.354745,
+    "ast_hash": "97f54930a2247bb80482db7b638843e1",
+    "semantic_hash": ""
+  },
+  "fretdna.html": {
+    "mtime": 1782824376.5251017,
+    "ast_hash": "447ede6564a681ea0a1dce4fc81667de",
+    "semantic_hash": ""
+  }
+}

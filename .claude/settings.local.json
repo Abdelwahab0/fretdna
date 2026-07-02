@@ -4,7 +4,9 @@
       "Bash(git init *)",
       "Bash(printf \"node_modules/\\\\ndist/\\\\n.DS_Store\\\\n\")",
       "Bash(git add *)",
-      "Bash(git -c user.name=FretDNA -c user.email=abdelwahabahmed002@gmail.com commit -q -m 'Initial commit: v1 prototype + FretDNA v2 design spec *)"
+      "Bash(git -c user.name=FretDNA -c user.email=abdelwahabahmed002@gmail.com commit -q -m 'Initial commit: v1 prototype + FretDNA v2 design spec *)",
+      "Bash(npm --version)",
+      "Bash(git --version)"
     ]
   }
 }

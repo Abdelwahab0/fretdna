@@ -1,0 +1,321 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "2026-07-02-fretdna-redesign-design.md",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design",
+      "community": 0,
+      "norm_label": "2026-07-02-fretdna-redesign-design.md"
+    },
+    {
+      "label": "FretDNA v2 \u2014 Design Spec",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_fretdna_v2_design_spec",
+      "community": 0,
+      "norm_label": "fretdna v2 \u2014 design spec"
+    },
+    {
+      "label": "Vision",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_vision",
+      "community": 3,
+      "norm_label": "vision"
+    },
+    {
+      "label": "The core problem being solved",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L12",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_the_core_problem_being_solved",
+      "community": 3,
+      "norm_label": "the core problem being solved"
+    },
+    {
+      "label": "Non-goals (YAGNI)",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L18",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_non_goals_yagni",
+      "community": 0,
+      "norm_label": "non-goals (yagni)"
+    },
+    {
+      "label": "Stack",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_stack",
+      "community": 2,
+      "norm_label": "stack"
+    },
+    {
+      "label": "Rationale",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L32",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_rationale",
+      "community": 2,
+      "norm_label": "rationale"
+    },
+    {
+      "label": "Architecture \u2014 brain vs. skin",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L36",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_architecture_brain_vs_skin",
+      "community": 1,
+      "norm_label": "architecture \u2014 brain vs. skin"
+    },
+    {
+      "label": "Boundaries per unit",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L62",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_boundaries_per_unit",
+      "community": 1,
+      "norm_label": "boundaries per unit"
+    },
+    {
+      "label": "The core reframe \u2014 Voicings, not note-maps",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L73",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_the_core_reframe_voicings_not_note_maps",
+      "community": 4,
+      "norm_label": "the core reframe \u2014 voicings, not note-maps"
+    },
+    {
+      "label": "The voicing picker = chord charts (unified concept)",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L89",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_the_voicing_picker_chord_charts_unified_concept",
+      "community": 4,
+      "norm_label": "the voicing picker = chord charts (unified concept)"
+    },
+    {
+      "label": "View & state",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L100",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_view_state",
+      "community": 0,
+      "norm_label": "view & state"
+    },
+    {
+      "label": "Visual direction",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L106",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_visual_direction",
+      "community": 0,
+      "norm_label": "visual direction"
+    },
+    {
+      "label": "Audio (Phase 4)",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L111",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_audio_phase_4",
+      "community": 0,
+      "norm_label": "audio (phase 4)"
+    },
+    {
+      "label": "Testing",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L117",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_testing",
+      "community": 0,
+      "norm_label": "testing"
+    },
+    {
+      "label": "Phasing (each phase leaves the app runnable)",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L122",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_phasing_each_phase_leaves_the_app_runnable",
+      "community": 0,
+      "norm_label": "phasing (each phase leaves the app runnable)"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design",
+      "target": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_fretdna_v2_design_spec",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_fretdna_v2_design_spec",
+      "target": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_architecture_brain_vs_skin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L111",
+      "weight": 1.0,
+      "source": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_fretdna_v2_design_spec",
+      "target": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_audio_phase_4",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_fretdna_v2_design_spec",
+      "target": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_non_goals_yagni",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L122",
+      "weight": 1.0,
+      "source": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_fretdna_v2_design_spec",
+      "target": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_phasing_each_phase_leaves_the_app_runnable",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_fretdna_v2_design_spec",
+      "target": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_stack",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L117",
+      "weight": 1.0,
+      "source": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_fretdna_v2_design_spec",
+      "target": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_testing",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L73",
+      "weight": 1.0,
+      "source": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_fretdna_v2_design_spec",
+      "target": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_the_core_reframe_voicings_not_note_maps",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L100",
+      "weight": 1.0,
+      "source": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_fretdna_v2_design_spec",
+      "target": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_view_state",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_fretdna_v2_design_spec",
+      "target": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_vision",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L106",
+      "weight": 1.0,
+      "source": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_fretdna_v2_design_spec",
+      "target": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_visual_direction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_vision",
+      "target": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_the_core_problem_being_solved",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_stack",
+      "target": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_rationale",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_architecture_brain_vs_skin",
+      "target": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_boundaries_per_unit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-07-02-fretdna-redesign-design.md",
+      "source_location": "L89",
+      "weight": 1.0,
+      "source": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_the_core_reframe_voicings_not_note_maps",
+      "target": "docs_superpowers_specs_2026_07_02_fretdna_redesign_design_the_voicing_picker_chord_charts_unified_concept",
+      "confidence_score": 1.0
+    }
+  ],
+  "hyperedges": [],
+  "built_at_commit": "c9013158fbd86e9636b07c5b977666c390b6ec7b"
+}
