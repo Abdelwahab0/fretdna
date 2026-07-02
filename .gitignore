@@ -9,3 +9,4 @@ vite.config.d.ts
 
 # Local agent scratch
 .superpowers/
+scratch_*.ts
