@@ -1,3 +1,11 @@
 node_modules/
 dist/
 .DS_Store
+
+# TypeScript build info / emitted config artifacts
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
+
+# Local agent scratch
+.superpowers/
