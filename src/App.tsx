@@ -3,6 +3,7 @@ import ModeTabs from './ui/ModeTabs';
 import RootPicker from './ui/panels/RootPicker';
 import QualityPicker from './ui/panels/QualityPicker';
 import ShapeControls from './ui/panels/ShapeControls';
+import VoicingControls from './ui/panels/VoicingControls';
 import IntervalControls from './ui/panels/IntervalControls';
 import ChordInfo from './ui/ChordInfo';
 import Legend from './ui/Legend';
@@ -30,6 +31,7 @@ export default function App() {
             <>
               <QualityPicker />
               <ShapeControls />
+              <VoicingControls />
             </>
           ) : (
             <IntervalControls />
