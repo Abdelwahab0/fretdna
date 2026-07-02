@@ -67,3 +67,10 @@ export function voicingsFor(root: number, quality: TriadQuality): Voicing[] {
   }
   return out;
 }
+
+/** Map an app chord-quality key to the triad this plan can voice, or null. */
+export function triadQualityOf(quality: string): TriadQuality | null {
+  if (quality === 'maj') return 'maj';
+  if (quality === 'min') return 'min';
+  return null;
+}

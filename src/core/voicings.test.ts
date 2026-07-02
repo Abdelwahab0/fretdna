@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { voicingsFor, assignFingers } from './voicings';
+import { voicingsFor, assignFingers, triadQualityOf } from './voicings';
 
 function fingerRow(notes: { string: number; finger: number }[]): number[] {
   const row = [-1, -1, -1, -1, -1, -1];
@@ -70,5 +70,17 @@ describe('voicingsFor', () => {
     const cShape = voicingsFor(0, 'maj').find((v) => v.shape === 'C')!;
     expect(cShape.baseFret).toBe(0);
     expect(fingerRow(cShape.notes)).toEqual([0, 1, 0, 2, 3, -1]);
+  });
+});
+
+describe('triadQualityOf', () => {
+  it('maps maj -> maj and min -> min', () => {
+    expect(triadQualityOf('maj')).toBe('maj');
+    expect(triadQualityOf('min')).toBe('min');
+  });
+  it('returns null for qualities without a Phase-2b triad voicing', () => {
+    for (const q of ['maj7', 'm7', 'dom7', 'dim', 'aug', 'sus2', 'add9', 'bogus']) {
+      expect(triadQualityOf(q)).toBeNull();
+    }
   });
 });

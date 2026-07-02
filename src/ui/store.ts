@@ -10,6 +10,9 @@ interface AppState {
   stringSet: StringSet;
   voicing: VoicingStyle;
   hlInterval: number | null;
+  voicingView: boolean;
+  shapeIndex: number;
+  showGhost: boolean;
   setRoot: (n: number) => void;
   setQuality: (q: string) => void;
   setMode: (m: Mode) => void;
@@ -17,6 +20,9 @@ interface AppState {
   setStringSet: (s: StringSet) => void;
   setVoicing: (v: VoicingStyle) => void;
   setHlInterval: (i: number | null) => void;
+  setVoicingView: (b: boolean) => void;
+  setShapeIndex: (i: number) => void;
+  setShowGhost: (b: boolean) => void;
 }
 
 export const useStore = create<AppState>((set) => ({
@@ -27,6 +33,9 @@ export const useStore = create<AppState>((set) => ({
   stringSet: 'all',
   voicing: 'standard',
   hlInterval: 0,
+  voicingView: false,
+  shapeIndex: 0,
+  showGhost: true,
   setRoot: (root) => set({ root }),
   setQuality: (quality) => set({ quality }),
   setMode: (mode) =>
@@ -35,4 +44,7 @@ export const useStore = create<AppState>((set) => ({
   setStringSet: (stringSet) => set({ stringSet }),
   setVoicing: (voicing) => set({ voicing }),
   setHlInterval: (hlInterval) => set({ hlInterval }),
+  setVoicingView: (voicingView) => set({ voicingView }),
+  setShapeIndex: (shapeIndex) => set({ shapeIndex }),
+  setShowGhost: (showGhost) => set({ showGhost }),
 }));
