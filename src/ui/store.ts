@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type { Mode, StringSet } from '../core/types';
-import type { Voicing } from '../core/chords';
+import type { VoicingStyle } from '../core/chords';
 
 interface AppState {
   root: number;
@@ -8,14 +8,14 @@ interface AppState {
   mode: Mode;
   showLabels: boolean;
   stringSet: StringSet;
-  voicing: Voicing;
+  voicing: VoicingStyle;
   hlInterval: number | null;
   setRoot: (n: number) => void;
   setQuality: (q: string) => void;
   setMode: (m: Mode) => void;
   setShowLabels: (b: boolean) => void;
   setStringSet: (s: StringSet) => void;
-  setVoicing: (v: Voicing) => void;
+  setVoicing: (v: VoicingStyle) => void;
   setHlInterval: (i: number | null) => void;
 }
 

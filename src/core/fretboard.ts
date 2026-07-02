@@ -1,5 +1,5 @@
 import { SC, noteAt, semitoneFrom } from './theory';
-import { getChordIntervals, type Voicing } from './chords';
+import { getChordIntervals, type VoicingStyle } from './chords';
 import type { Mode, StringSet } from './types';
 
 // ── Layout (SVG viewBox 0 0 1000 190) ──
@@ -53,7 +53,7 @@ export interface DotParams {
   mode: Mode;
   root: number;
   quality: string;
-  voicing: Voicing;
+  voicing: VoicingStyle;
   stringSet: StringSet;
   hlInterval: number | null;
 }

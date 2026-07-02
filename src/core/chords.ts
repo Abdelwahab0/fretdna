@@ -1,4 +1,4 @@
-export type Voicing = 'standard' | 'shell' | 'rootless';
+export type VoicingStyle = 'standard' | 'shell' | 'rootless';
 
 export interface Quality {
   i: number[]; // intervals in semitones from root
@@ -25,7 +25,7 @@ export const QTYPES: Record<string, Quality> = {
   add9: { i: [0, 4, 7, 2],     l: 'add9',  g: 3 },
 };
 
-export function getChordIntervals(quality: string, voicing: Voicing = 'standard'): number[] {
+export function getChordIntervals(quality: string, voicing: VoicingStyle = 'standard'): number[] {
   const q = QTYPES[quality];
   if (!q) return [];
   let ivs = [...q.i];

@@ -1,6 +1,6 @@
 import { useStore } from '../store';
 import type { StringSet } from '../../core/types';
-import type { Voicing } from '../../core/chords';
+import type { VoicingStyle } from '../../core/chords';
 
 const STRING_SET_OPTS: { v: StringSet; l: string }[] = [
   { v: 'all', l: 'All strings' },
@@ -10,7 +10,7 @@ const STRING_SET_OPTS: { v: StringSet; l: string }[] = [
   { v: '456', l: 'Strings 4-5-6  (D A E)' },
 ];
 
-const VOICING_OPTS: { v: Voicing; l: string }[] = [
+const VOICING_OPTS: { v: VoicingStyle; l: string }[] = [
   { v: 'standard', l: 'Standard' },
   { v: 'shell', l: 'Shell (3 + 7)' },
   { v: 'rootless', l: 'Rootless' },
