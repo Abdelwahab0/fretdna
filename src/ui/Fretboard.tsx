@@ -1,0 +1,79 @@
+import { useStore } from './store';
+import { NOTES, S_NAMES, SC, ICOLORS, intervalName } from '../core/theory';
+import {
+  getDots, sy, fcx, flx, BOARD, SW, INLAYS,
+  VW, VH, NX, PT, PB, FMAX,
+} from '../core/fretboard';
+
+export default function Fretboard() {
+  const { root, quality, mode, voicing, stringSet, hlInterval, showLabels } = useStore();
+  const dots = getDots({ mode, root, quality, voicing, stringSet, hlInterval });
+  const my = PT + ((SC - 1) * (sy(1) - sy(0))) / 2;
+
+  return (
+    <svg data-testid="fretboard" id="fb" viewBox={`0 0 ${VW} ${VH}`} xmlns="http://www.w3.org/2000/svg">
+      {/* wood */}
+      <rect x={NX} y={0} width={VW - NX} height={VH} fill={BOARD.wood} />
+      {/* grain */}
+      {Array.from({ length: 12 }, (_, i) => {
+        const y = (VH / 12) * i + 1;
+        return <line key={`g${i}`} x1={NX} y1={y} x2={VW} y2={y} stroke={BOARD.grain} strokeWidth={1.2} />;
+      })}
+      {/* inlays */}
+      {INLAYS.map((f) => {
+        const cx = flx(f - 1) + (flx(1) - flx(0)) / 2;
+        if (f === 12) {
+          const g = (sy(1) - sy(0)) * 0.9;
+          return (
+            <g key={`in${f}`}>
+              <circle cx={cx} cy={my - g / 2} r={4.5} fill={BOARD.inlay} />
+              <circle cx={cx} cy={my + g / 2} r={4.5} fill={BOARD.inlay} />
+            </g>
+          );
+        }
+        return <circle key={`in${f}`} cx={cx} cy={my} r={4.5} fill={BOARD.inlay} />;
+      })}
+      {/* strings */}
+      {Array.from({ length: SC }, (_, s) => (
+        <line key={`s${s}`} x1={NX} y1={sy(s)} x2={VW - 2} y2={sy(s)} stroke={BOARD.string} strokeWidth={SW[s]} opacity={0.75} />
+      ))}
+      {/* nut */}
+      <rect x={NX} y={PT - 5} width={5} height={(SC - 1) * (sy(1) - sy(0)) + 10} fill={BOARD.nut} rx={1} />
+      {/* frets */}
+      {Array.from({ length: FMAX }, (_, i) => {
+        const f = i + 1;
+        return <line key={`f${f}`} x1={flx(f)} y1={PT - 2} x2={flx(f)} y2={VH - PB + 2} stroke={BOARD.fret} strokeWidth={1.4} />;
+      })}
+      {/* string labels */}
+      {Array.from({ length: SC }, (_, s) => (
+        <text key={`sl${s}`} x={NX - 8} y={sy(s) + 4} textAnchor="end" fontSize={11} fontFamily="JetBrains Mono, monospace" fill={BOARD.label}>
+          {S_NAMES[s]}
+        </text>
+      ))}
+      {/* fret numbers */}
+      {Array.from({ length: FMAX }, (_, i) => i + 1).filter((f) => f % 2 === 1).map((f) => (
+        <text key={`fn${f}`} x={fcx(f)} y={VH - 5} textAnchor="middle" fontSize={9} fontFamily="JetBrains Mono, monospace" fill={BOARD.fretNum}>
+          {f}
+        </text>
+      ))}
+      <text x={fcx(0)} y={VH - 5} textAnchor="middle" fontSize={9} fontFamily="JetBrains Mono, monospace" fill={BOARD.fretNum}>O</text>
+      {/* dots */}
+      {dots.map(({ s, f, semi, note, delay }) => {
+        const cx = fcx(f), cy = sy(s);
+        const color = ICOLORS[semi] ?? '#888';
+        const r = semi === 0 ? 13 : 11;
+        return (
+          <g key={`d${s}-${f}`} transform={`translate(${cx},${cy})`}>
+            <g className="nd" style={{ animationDelay: `${delay}ms` }}>
+              {semi === 0 && <circle cx={0} cy={0} r={r + 3.5} fill="none" stroke={color} strokeWidth={1.5} opacity={0.3} />}
+              <circle data-testid="dot" cx={0} cy={0} r={r} fill={color} opacity={semi === 0 ? 1 : 0.9} />
+              <text x={0} y={4} textAnchor="middle" fontSize={semi === 0 ? 9 : 8} fontFamily="JetBrains Mono, monospace" fill="#fff" fontWeight={500}>
+                {showLabels ? intervalName(semi) : NOTES[note]}
+              </text>
+            </g>
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
