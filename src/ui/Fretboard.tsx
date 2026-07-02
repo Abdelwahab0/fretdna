@@ -4,11 +4,18 @@ import {
   getDots, sy, fcx, flx, BOARD, SW, INLAYS,
   VW, VH, NX, PT, PB, FMAX,
 } from '../core/fretboard';
+import { voicingsFor, triadQualityOf } from '../core/voicings';
 
 export default function Fretboard() {
-  const { root, quality, mode, voicing, stringSet, hlInterval, showLabels } = useStore();
-  const dots = getDots({ mode, root, quality, voicing, stringSet, hlInterval });
+  const { root, quality, mode, voicing, stringSet, hlInterval, showLabels, voicingView, shapeIndex, showGhost } = useStore();
   const my = PT + ((SC - 1) * (sy(1) - sy(0))) / 2;
+
+  const tq = mode === 'shapes' && voicingView ? triadQualityOf(quality) : null;
+  const voicings = tq ? voicingsFor(root, tq) : [];
+  const selected = voicings.length ? voicings[shapeIndex % voicings.length] : null;
+
+  // Dots for the classic all-notes view (also used as the ghost overlay).
+  const allDots = getDots({ mode, root, quality, voicing, stringSet, hlInterval });
 
   return (
     <svg data-testid="fretboard" id="fb" viewBox={`0 0 ${VW} ${VH}`} xmlns="http://www.w3.org/2000/svg">
@@ -57,23 +64,50 @@ export default function Fretboard() {
         </text>
       ))}
       <text x={fcx(0)} y={VH - 5} textAnchor="middle" fontSize={9} fontFamily="JetBrains Mono, monospace" fill={BOARD.fretNum}>O</text>
-      {/* dots */}
-      {dots.map(({ s, f, semi, note, delay }) => {
-        const cx = fcx(f), cy = sy(s);
-        const color = ICOLORS[semi] ?? '#888';
-        const r = semi === 0 ? 13 : 11;
-        return (
-          <g key={`d${s}-${f}`} transform={`translate(${cx},${cy})`}>
-            <g className="nd" style={{ animationDelay: `${delay}ms` }}>
-              {semi === 0 && <circle cx={0} cy={0} r={r + 3.5} fill="none" stroke={color} strokeWidth={1.5} opacity={0.3} />}
-              <circle data-testid="dot" cx={0} cy={0} r={r} fill={color} opacity={semi === 0 ? 1 : 0.9} />
-              <text x={0} y={4} textAnchor="middle" fontSize={semi === 0 ? 9 : 8} fontFamily="JetBrains Mono, monospace" fill="#fff" fontWeight={500}>
-                {showLabels ? intervalName(semi) : NOTES[note]}
-              </text>
+
+      {/* Voicing path: ghost overlay (optional) + selected fingered voicing */}
+      {selected ? (
+        <>
+          {showGhost && allDots.map(({ s, f, semi }) => (
+            <circle key={`gh${s}-${f}`} data-testid="ghost-dot" cx={fcx(f)} cy={sy(s)} r={8}
+              fill={ICOLORS[semi] ?? '#888'} opacity={0.14} />
+          ))}
+          {selected.notes.map(({ string, fret, semi, finger }) => {
+            const cx = fcx(fret), cy = sy(string);
+            const color = ICOLORS[semi] ?? '#888';
+            const r = semi === 0 ? 13 : 11;
+            return (
+              <g key={`v${string}-${fret}`} transform={`translate(${cx},${cy})`}>
+                <g className="nd">
+                  {semi === 0 && <circle cx={0} cy={0} r={r + 3.5} fill="none" stroke={color} strokeWidth={1.5} opacity={0.3} />}
+                  <circle data-testid="voicing-dot" cx={0} cy={0} r={r} fill={color} opacity={semi === 0 ? 1 : 0.9} />
+                  <text x={0} y={4} textAnchor="middle" fontSize={semi === 0 ? 9 : 8} fontFamily="JetBrains Mono, monospace" fill="#fff" fontWeight={500}>
+                    {showLabels ? (finger === 0 ? '0' : String(finger)) : NOTES[(root + semi) % 12]}
+                  </text>
+                </g>
+              </g>
+            );
+          })}
+        </>
+      ) : (
+        /* Classic all-notes view (unchanged) */
+        allDots.map(({ s, f, semi, note, delay }) => {
+          const cx = fcx(f), cy = sy(s);
+          const color = ICOLORS[semi] ?? '#888';
+          const r = semi === 0 ? 13 : 11;
+          return (
+            <g key={`d${s}-${f}`} transform={`translate(${cx},${cy})`}>
+              <g className="nd" style={{ animationDelay: `${delay}ms` }}>
+                {semi === 0 && <circle cx={0} cy={0} r={r + 3.5} fill="none" stroke={color} strokeWidth={1.5} opacity={0.3} />}
+                <circle data-testid="dot" cx={0} cy={0} r={r} fill={color} opacity={semi === 0 ? 1 : 0.9} />
+                <text x={0} y={4} textAnchor="middle" fontSize={semi === 0 ? 9 : 8} fontFamily="JetBrains Mono, monospace" fill="#fff" fontWeight={500}>
+                  {showLabels ? intervalName(semi) : NOTES[note]}
+                </text>
+              </g>
             </g>
-          </g>
-        );
-      })}
+          );
+        })
+      )}
     </svg>
   );
 }

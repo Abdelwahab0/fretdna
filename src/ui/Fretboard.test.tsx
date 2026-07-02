@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import Fretboard from './Fretboard';
 import { useStore } from './store';
 import { getDots } from '../core/fretboard';
+import { voicingsFor } from '../core/voicings';
 
 const initial = useStore.getState();
 
@@ -22,5 +23,29 @@ describe('<Fretboard />', () => {
       voicing: s.voicing, stringSet: s.stringSet, hlInterval: s.hlInterval,
     }).length;
     expect(screen.getAllByTestId('dot')).toHaveLength(expected);
+  });
+});
+
+describe('<Fretboard /> voicing view', () => {
+  beforeEach(() => useStore.setState(initial, true));
+
+  it('renders one voicing-dot per note of the selected CAGED voicing (C major, C-shape)', () => {
+    useStore.setState({ root: 0, quality: 'maj', mode: 'shapes', voicingView: true, shapeIndex: 0, showGhost: false });
+    render(<Fretboard />);
+    const expected = voicingsFor(0, 'maj')[0].notes.length; // C-shape
+    expect(screen.getAllByTestId('voicing-dot')).toHaveLength(expected);
+  });
+
+  it('shows ghost dots when showGhost is on', () => {
+    useStore.setState({ root: 0, quality: 'maj', mode: 'shapes', voicingView: true, shapeIndex: 0, showGhost: true });
+    render(<Fretboard />);
+    expect(screen.getAllByTestId('ghost-dot').length).toBeGreaterThan(0);
+  });
+
+  it('falls back to the all-notes view for unsupported qualities (maj7)', () => {
+    useStore.setState({ root: 0, quality: 'maj7', mode: 'shapes', voicingView: true });
+    render(<Fretboard />);
+    expect(screen.queryAllByTestId('voicing-dot')).toHaveLength(0);
+    expect(screen.getAllByTestId('dot').length).toBeGreaterThan(0);
   });
 });
