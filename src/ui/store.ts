@@ -14,6 +14,7 @@ interface AppState {
   shapeIndex: number;
   showGhost: boolean;
   showBox: boolean;
+  showAllPositions: boolean;
   showScale: boolean;
   theme: 'day' | 'night';
   setRoot: (n: number) => void;
@@ -27,6 +28,7 @@ interface AppState {
   setShapeIndex: (i: number) => void;
   setShowGhost: (b: boolean) => void;
   setShowBox: (b: boolean) => void;
+  setShowAllPositions: (b: boolean) => void;
   setShowScale: (b: boolean) => void;
   setTheme: (t: 'day' | 'night') => void;
 }
@@ -43,6 +45,7 @@ export const useStore = create<AppState>((set) => ({
   shapeIndex: 0,
   showGhost: true,
   showBox: true,
+  showAllPositions: false,
   showScale: false,
   theme: 'day',
   setRoot: (root) => set({ root }),
@@ -57,6 +60,7 @@ export const useStore = create<AppState>((set) => ({
   setShapeIndex: (shapeIndex) => set({ shapeIndex }),
   setShowGhost: (showGhost) => set({ showGhost }),
   setShowBox: (showBox) => set({ showBox }),
+  setShowAllPositions: (showAllPositions) => set({ showAllPositions }),
   setShowScale: (showScale) => set({ showScale }),
   setTheme: (theme) => set({ theme }),
 }));

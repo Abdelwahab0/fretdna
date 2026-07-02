@@ -13,7 +13,7 @@ const ROOT_R = 15;
 const GHOST_R = 10;
 
 export default function Fretboard() {
-  const { root, quality, mode, voicing, stringSet, hlInterval, showLabels, voicingView, shapeIndex, showGhost, showBox, showScale, theme } = useStore();
+  const { root, quality, mode, voicing, stringSet, hlInterval, showLabels, voicingView, shapeIndex, showGhost, showBox, showAllPositions, showScale, theme } = useStore();
   const board = theme === 'night' ? BOARD_NIGHT : BOARD;
   const stringGap = sy(1) - sy(0);
   const my = PT + ((SC - 1) * stringGap) / 2;
@@ -22,14 +22,21 @@ export default function Fretboard() {
   const voicings = tq ? voicingsFor(root, tq) : [];
   const selected = voicings.length ? voicings[shapeIndex % voicings.length] : null;
 
-  // CAGED position box geometry for the selected voicing.
-  const span = selected ? voicingSpan(selected) : null;
-  const boxLeft = span ? (span.minFret === 0 ? NX + 2 : flx(span.minFret - 1)) : 0;
-  const boxRight = span ? flx(span.maxFret) : 0;
+  // CAGED position box geometry. Show all positions, or just the selected one.
   const boxTop = sy(0) - stringGap * 0.6;
   const boxBottom = sy(SC - 1) + stringGap * 0.6;
   const boxStroke = theme === 'night' ? 'rgba(79,195,247,0.6)' : 'rgba(176,104,24,0.55)';
   const boxFill = theme === 'night' ? 'rgba(79,195,247,0.09)' : 'rgba(176,104,24,0.08)';
+  const boxList = (showAllPositions ? voicings : selected ? [selected] : []).map((v, i) => {
+    const sp = voicingSpan(v);
+    return {
+      shape: v.shape,
+      isSel: v === selected,
+      left: sp.minFret === 0 ? NX + 2 : flx(sp.minFret - 1),
+      right: flx(sp.maxFret),
+      labelY: boxTop + 15 + (i % 2) * 15, // stagger labels so overlapping boxes stay readable
+    };
+  });
 
   // Dots for the classic all-notes view (also used as the ghost overlay).
   const allDots = getDots({ mode, root, quality, voicing, stringSet, hlInterval });
@@ -88,16 +95,17 @@ export default function Fretboard() {
       {/* Voicing path: ghost overlay (optional) + selected fingered voicing */}
       {selected ? (
         <>
-          {showBox && span && (
-            <g>
-              <rect x={boxLeft} y={boxTop} width={boxRight - boxLeft} height={boxBottom - boxTop} rx={9}
-                fill={boxFill} stroke={boxStroke} strokeWidth={2} />
-              <text x={boxLeft + 8} y={boxTop + 15} fontSize={12} fontFamily="Space Grotesk, sans-serif"
-                fontWeight={600} fill={boxStroke}>
-                {selected.shape}-shape
+          {showBox && boxList.map((b) => (
+            <g key={`box${b.shape}`}>
+              <rect x={b.left} y={boxTop} width={b.right - b.left} height={boxBottom - boxTop} rx={9}
+                fill={b.isSel ? boxFill : 'none'} stroke={boxStroke} strokeWidth={b.isSel ? 2.5 : 1.2}
+                strokeOpacity={b.isSel ? 1 : 0.45} />
+              <text x={b.left + 8} y={b.labelY} fontSize={12} fontFamily="Space Grotesk, sans-serif"
+                fontWeight={600} fill={boxStroke} fillOpacity={b.isSel ? 1 : 0.55}>
+                {b.shape}
               </text>
             </g>
-          )}
+          ))}
           {showGhost && allDots.map(({ s, f, semi }) => (
             <circle key={`gh${s}-${f}`} data-testid="ghost-dot" cx={fcx(f)} cy={sy(s)} r={GHOST_R}
               fill={ICOLORS[semi] ?? '#888'} opacity={theme === 'night' ? 0.2 : 0.14} />
