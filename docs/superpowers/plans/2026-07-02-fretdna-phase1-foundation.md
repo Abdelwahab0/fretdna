@@ -549,7 +549,7 @@ Expected: FAIL — cannot resolve `./fretboard`.
 - [ ] **Step 3: Write `src/core/fretboard.ts`**
 
 ```ts
-import { TUNING, SC, noteAt, semitoneFrom } from './theory';
+import { SC, noteAt, semitoneFrom } from './theory';
 import { getChordIntervals, type Voicing } from './chords';
 import type { Mode, StringSet } from './types';
 

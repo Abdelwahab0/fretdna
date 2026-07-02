@@ -1,4 +1,4 @@
-import { TUNING, SC, noteAt, semitoneFrom } from './theory';
+import { SC, noteAt, semitoneFrom } from './theory';
 import { getChordIntervals, type Voicing } from './chords';
 import type { Mode, StringSet } from './types';
 
