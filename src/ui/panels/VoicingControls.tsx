@@ -2,7 +2,7 @@ import { useStore } from '../store';
 import { voicingsFor, triadQualityOf } from '../../core/voicings';
 
 export default function VoicingControls() {
-  const { root, quality, voicingView, setVoicingView, shapeIndex, setShapeIndex, showGhost, setShowGhost } = useStore();
+  const { root, quality, voicingView, setVoicingView, shapeIndex, setShapeIndex, showGhost, setShowGhost, showBox, setShowBox } = useStore();
   const tq = triadQualityOf(quality);
   const voicings = tq ? voicingsFor(root, tq) : [];
 
@@ -31,6 +31,13 @@ export default function VoicingControls() {
                   {v.shape}-shape{v.baseFret > 0 ? ` (fret ${v.baseFret})` : ' (open)'}
                 </button>
               ))}
+            </div>
+            <div className="tog-row">
+              <label className="tog">
+                <input type="checkbox" checked={showBox} onChange={(e) => setShowBox(e.target.checked)} />
+                <span className="tog-t" />
+              </label>
+              <span className="tog-l">CAGED box</span>
             </div>
             <div className="tog-row">
               <label className="tog">

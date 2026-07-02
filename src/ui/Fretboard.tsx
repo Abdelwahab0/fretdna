@@ -4,20 +4,30 @@ import {
   getDots, sy, fcx, flx, BOARD, BOARD_NIGHT, SW, INLAYS,
   VW, VH, NX, PT, PB, FMAX,
 } from '../core/fretboard';
-import { voicingsFor, triadQualityOf } from '../core/voicings';
+import { voicingsFor, triadQualityOf, voicingSpan } from '../core/voicings';
 
 const DOT_R = 13;
 const ROOT_R = 15;
 const GHOST_R = 10;
 
 export default function Fretboard() {
-  const { root, quality, mode, voicing, stringSet, hlInterval, showLabels, voicingView, shapeIndex, showGhost, theme } = useStore();
+  const { root, quality, mode, voicing, stringSet, hlInterval, showLabels, voicingView, shapeIndex, showGhost, showBox, theme } = useStore();
   const board = theme === 'night' ? BOARD_NIGHT : BOARD;
-  const my = PT + ((SC - 1) * (sy(1) - sy(0))) / 2;
+  const stringGap = sy(1) - sy(0);
+  const my = PT + ((SC - 1) * stringGap) / 2;
 
   const tq = mode === 'shapes' && voicingView ? triadQualityOf(quality) : null;
   const voicings = tq ? voicingsFor(root, tq) : [];
   const selected = voicings.length ? voicings[shapeIndex % voicings.length] : null;
+
+  // CAGED position box geometry for the selected voicing.
+  const span = selected ? voicingSpan(selected) : null;
+  const boxLeft = span ? (span.minFret === 0 ? NX + 2 : flx(span.minFret - 1)) : 0;
+  const boxRight = span ? flx(span.maxFret) : 0;
+  const boxTop = sy(0) - stringGap * 0.6;
+  const boxBottom = sy(SC - 1) + stringGap * 0.6;
+  const boxStroke = theme === 'night' ? 'rgba(79,195,247,0.6)' : 'rgba(176,104,24,0.55)';
+  const boxFill = theme === 'night' ? 'rgba(79,195,247,0.09)' : 'rgba(176,104,24,0.08)';
 
   // Dots for the classic all-notes view (also used as the ghost overlay).
   const allDots = getDots({ mode, root, quality, voicing, stringSet, hlInterval });
@@ -73,6 +83,16 @@ export default function Fretboard() {
       {/* Voicing path: ghost overlay (optional) + selected fingered voicing */}
       {selected ? (
         <>
+          {showBox && span && (
+            <g>
+              <rect x={boxLeft} y={boxTop} width={boxRight - boxLeft} height={boxBottom - boxTop} rx={9}
+                fill={boxFill} stroke={boxStroke} strokeWidth={2} />
+              <text x={boxLeft + 8} y={boxTop + 15} fontSize={12} fontFamily="Space Grotesk, sans-serif"
+                fontWeight={600} fill={boxStroke}>
+                {selected.shape}-shape
+              </text>
+            </g>
+          )}
           {showGhost && allDots.map(({ s, f, semi }) => (
             <circle key={`gh${s}-${f}`} data-testid="ghost-dot" cx={fcx(f)} cy={sy(s)} r={GHOST_R}
               fill={ICOLORS[semi] ?? '#888'} opacity={theme === 'night' ? 0.2 : 0.14} />

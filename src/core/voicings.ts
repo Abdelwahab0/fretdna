@@ -74,3 +74,9 @@ export function triadQualityOf(quality: string): TriadQuality | null {
   if (quality === 'min') return 'min';
   return null;
 }
+
+/** The fret window a voicing occupies (min/max fret across its notes). */
+export function voicingSpan(v: Voicing): { minFret: number; maxFret: number } {
+  const frets = v.notes.map((n) => n.fret);
+  return { minFret: Math.min(...frets), maxFret: Math.max(...frets) };
+}

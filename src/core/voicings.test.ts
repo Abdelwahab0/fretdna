@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { voicingsFor, assignFingers, triadQualityOf } from './voicings';
+import { voicingsFor, assignFingers, triadQualityOf, voicingSpan } from './voicings';
 
 function fingerRow(notes: { string: number; finger: number }[]): number[] {
   const row = [-1, -1, -1, -1, -1, -1];
@@ -70,6 +70,18 @@ describe('voicingsFor', () => {
     const cShape = voicingsFor(0, 'maj').find((v) => v.shape === 'C')!;
     expect(cShape.baseFret).toBe(0);
     expect(fingerRow(cShape.notes)).toEqual([0, 1, 0, 2, 3, -1]);
+  });
+});
+
+describe('voicingSpan', () => {
+  it('reports the min and max fret of a voicing', () => {
+    // C major A-shape is a barre at fret 3: frets 3,5,5,5,3 -> min 3, max 5
+    const aShape = voicingsFor(0, 'maj').find((v) => v.shape === 'A')!;
+    expect(voicingSpan(aShape)).toEqual({ minFret: 3, maxFret: 5 });
+  });
+  it('open C-shape spans 0..3', () => {
+    const cShape = voicingsFor(0, 'maj').find((v) => v.shape === 'C')!;
+    expect(voicingSpan(cShape)).toEqual({ minFret: 0, maxFret: 3 });
   });
 });
 
