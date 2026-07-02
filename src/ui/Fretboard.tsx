@@ -5,13 +5,15 @@ import {
   VW, VH, NX, PT, PB, FMAX,
 } from '../core/fretboard';
 import { voicingsFor, triadQualityOf, voicingSpan } from '../core/voicings';
+import { getScaleDots, SCALE_DEGREE } from '../core/scales';
+import { getChordIntervals } from '../core/chords';
 
 const DOT_R = 13;
 const ROOT_R = 15;
 const GHOST_R = 10;
 
 export default function Fretboard() {
-  const { root, quality, mode, voicing, stringSet, hlInterval, showLabels, voicingView, shapeIndex, showGhost, showBox, theme } = useStore();
+  const { root, quality, mode, voicing, stringSet, hlInterval, showLabels, voicingView, shapeIndex, showGhost, showBox, showScale, theme } = useStore();
   const board = theme === 'night' ? BOARD_NIGHT : BOARD;
   const stringGap = sy(1) - sy(0);
   const my = PT + ((SC - 1) * stringGap) / 2;
@@ -31,6 +33,9 @@ export default function Fretboard() {
 
   // Dots for the classic all-notes view (also used as the ghost overlay).
   const allDots = getDots({ mode, root, quality, voicing, stringSet, hlInterval });
+
+  // Scale overlay: full parent-scale tones (chord tones flagged), when no voicing is selected.
+  const scaleDots = !selected && showScale ? getScaleDots(root, quality, getChordIntervals(quality)) : [];
 
   return (
     <svg data-testid="fretboard" id="fb" viewBox={`0 0 ${VW} ${VH}`} xmlns="http://www.w3.org/2000/svg">
@@ -114,6 +119,24 @@ export default function Fretboard() {
             );
           })}
         </>
+      ) : scaleDots.length ? (
+        /* Scale overlay: chord tones colored, passing tones muted */
+        scaleDots.map(({ s, f, semi, note, inChord }) => {
+          const cx = fcx(f), cy = sy(s);
+          const color = inChord ? (ICOLORS[semi] ?? '#888') : (theme === 'night' ? '#48597C' : '#B4AB96');
+          const r = inChord ? (semi === 0 ? ROOT_R : DOT_R) : 9;
+          return (
+            <g key={`sc${s}-${f}`} transform={`translate(${cx},${cy})`}>
+              <g className="nd">
+                {inChord && semi === 0 && <circle cx={0} cy={0} r={r + 3.5} fill="none" stroke={color} strokeWidth={1.5} opacity={0.35} />}
+                <circle cx={0} cy={0} r={r} fill={color} opacity={inChord ? 0.95 : 0.55} />
+                <text x={0} y={4} textAnchor="middle" fontSize={inChord ? 11 : 8} fontFamily="JetBrains Mono, monospace" fill="#fff" fontWeight={inChord ? 600 : 500}>
+                  {showLabels ? SCALE_DEGREE[semi] : NOTES[note]}
+                </text>
+              </g>
+            </g>
+          );
+        })
       ) : (
         /* Classic all-notes view */
         allDots.map(({ s, f, semi, note, delay }) => {

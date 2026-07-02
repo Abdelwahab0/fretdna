@@ -9,7 +9,7 @@ import { useStore } from './ui/store';
 import { useEffect } from 'react';
 
 export default function App() {
-  const { showLabels, setShowLabels, theme, setTheme } = useStore();
+  const { showLabels, setShowLabels, showScale, setShowScale, theme, setTheme } = useStore();
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -44,6 +44,16 @@ export default function App() {
 
         <aside id="rp">
           <VoicingControls />
+          <div className="sec">
+            <div className="sec-label">Scale</div>
+            <div className="tog-row">
+              <label className="tog">
+                <input type="checkbox" checked={showScale} onChange={(e) => setShowScale(e.target.checked)} />
+                <span className="tog-t" />
+              </label>
+              <span className="tog-l">Show scale</span>
+            </div>
+          </div>
           <ShapeControls />
           <div className="sec">
             <div className="sec-label">Labels</div>
