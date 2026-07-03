@@ -42,10 +42,32 @@ describe('<Fretboard /> voicing view', () => {
     expect(screen.getAllByTestId('ghost-dot').length).toBeGreaterThan(0);
   });
 
-  it('falls back to the all-notes view for unsupported qualities (maj7)', () => {
-    useStore.setState({ root: 0, quality: 'maj7', mode: 'shapes', voicingView: true });
+  it('falls back to the all-notes view for unsupported qualities (sus2)', () => {
+    useStore.setState({ root: 0, quality: 'sus2', mode: 'shapes', voicingView: true });
     render(<Fretboard />);
     expect(screen.queryAllByTestId('voicing-dot')).toHaveLength(0);
     expect(screen.getAllByTestId('dot').length).toBeGreaterThan(0);
+  });
+});
+
+describe('<Fretboard /> triads in position', () => {
+  beforeEach(() => useStore.setState(initial, true));
+
+  it('renders triad-in-position dots when the mode is active with a selected voicing', () => {
+    useStore.setState({
+      root: 0, quality: 'maj', mode: 'shapes', voicingView: true,
+      triadsInBox: true, triadDegree: 0,
+    });
+    render(<Fretboard />);
+    expect(screen.getAllByTestId('triad-box-dot').length).toBeGreaterThan(0);
+  });
+
+  it('does not render triad-in-position dots when triadDegree is null', () => {
+    useStore.setState({
+      root: 0, quality: 'maj', mode: 'shapes', voicingView: true,
+      triadsInBox: true, triadDegree: null,
+    });
+    render(<Fretboard />);
+    expect(screen.queryByTestId('triad-box-dot')).toBe(null);
   });
 });

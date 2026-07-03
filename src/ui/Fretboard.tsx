@@ -6,6 +6,7 @@ import {
 } from '../core/fretboard';
 import { voicingsFor, shapeQualityOf, voicingSpan } from '../core/voicings';
 import { getScaleDots, SCALE_DEGREE } from '../core/scales';
+import { triadTonesInWindow } from '../core/diatonic';
 import { getChordIntervals } from '../core/chords';
 
 const DOT_R = 13;
@@ -13,7 +14,7 @@ const ROOT_R = 15;
 const GHOST_R = 10;
 
 export default function Fretboard() {
-  const { root, quality, mode, voicing, stringSet, hlInterval, showLabels, voicingView, shapeIndex, showGhost, showBox, showAllPositions, showScale, theme } = useStore();
+  const { root, quality, mode, voicing, stringSet, hlInterval, showLabels, voicingView, shapeIndex, showGhost, showBox, showAllPositions, showScale, triadsInBox, triadDegree, theme } = useStore();
   const board = theme === 'night' ? BOARD_NIGHT : BOARD;
   const stringGap = sy(1) - sy(0);
   const my = PT + ((SC - 1) * stringGap) / 2;
@@ -43,6 +44,12 @@ export default function Fretboard() {
 
   // Scale overlay: full parent-scale tones (chord tones flagged), when no voicing is selected.
   const scaleDots = !selected && showScale ? getScaleDots(root, quality, getChordIntervals(quality)) : [];
+
+  // Triads-in-position: the selected diatonic triad's tones inside the current box window.
+  const triadBox =
+    selected && triadsInBox && triadDegree != null
+      ? triadTonesInWindow(root, quality, triadDegree, voicingSpan(selected).minFret, voicingSpan(selected).maxFret)
+      : [];
 
   return (
     <svg data-testid="fretboard" id="fb" viewBox={`0 0 ${VW} ${VH}`} xmlns="http://www.w3.org/2000/svg">
@@ -106,11 +113,29 @@ export default function Fretboard() {
               </text>
             </g>
           ))}
-          {showGhost && allDots.map(({ s, f, semi }) => (
+          {triadBox.length ? (
+            triadBox.map(({ s, f, note, inTriad, triadSemi }) => {
+              const cx = fcx(f), cy = sy(s);
+              const color = inTriad ? (ICOLORS[triadSemi] ?? '#888') : (theme === 'night' ? '#48597C' : '#B4AB96');
+              const r = inTriad ? (triadSemi === 0 ? ROOT_R : DOT_R) : 9;
+              return (
+                <g key={`tb${s}-${f}`} data-testid="triad-box-dot" transform={`translate(${cx},${cy})`}>
+                  <g className="nd">
+                    {inTriad && triadSemi === 0 && <circle cx={0} cy={0} r={r + 3.5} fill="none" stroke={color} strokeWidth={1.5} opacity={0.35} />}
+                    <circle cx={0} cy={0} r={r} fill={color} opacity={inTriad ? 0.95 : 0.5} />
+                    <text x={0} y={4} textAnchor="middle" fontSize={inTriad ? 11 : 8} fontFamily="JetBrains Mono, monospace" fill="#fff" fontWeight={inTriad ? 600 : 500}>
+                      {showLabels ? (triadSemi === 0 ? 'R' : triadSemi === 3 || triadSemi === 4 ? '3' : '5') : NOTES[note]}
+                    </text>
+                  </g>
+                </g>
+              );
+            })
+          ) : null}
+          {!triadBox.length && showGhost && allDots.map(({ s, f, semi }) => (
             <circle key={`gh${s}-${f}`} data-testid="ghost-dot" cx={fcx(f)} cy={sy(s)} r={GHOST_R}
               fill={ICOLORS[semi] ?? '#888'} opacity={theme === 'night' ? 0.2 : 0.14} />
           ))}
-          {selected.notes.map(({ string, fret, semi, finger }) => {
+          {!triadBox.length && selected.notes.map(({ string, fret, semi, finger }) => {
             const cx = fcx(fret), cy = sy(string);
             const color = ICOLORS[semi] ?? '#888';
             const r = semi === 0 ? ROOT_R : DOT_R;
