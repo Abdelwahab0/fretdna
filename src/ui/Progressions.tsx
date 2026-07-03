@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useStore } from './store';
-import { FEATURED, LIBRARY, STYLES } from '../content/progressions';
+import { FEATURED, LIBRARY, STYLES, CONCEPTS } from '../content/progressions';
 import type { Chord, Progression } from '../core/types';
 
 const ALL: Progression[] = [...FEATURED, ...LIBRARY];
@@ -8,8 +8,11 @@ const ALL: Progression[] = [...FEATURED, ...LIBRARY];
 export default function Progressions() {
   const { progId, progStep, setProgId, setProgStep, setRoot, setQuality } = useStore();
   const [style, setStyle] = useState('All');
+  const [concept, setConcept] = useState('All');
   const active = ALL.find((p) => p.id === progId) ?? null;
-  const shown = style === 'All' ? ALL : ALL.filter((p) => p.style === style);
+  const shown = ALL.filter(
+    (p) => (style === 'All' || p.style === style) && (concept === 'All' || p.concept === concept),
+  );
 
   const loadChord = (c: Chord) => {
     setRoot(c.root);
@@ -41,6 +44,19 @@ export default function Progressions() {
             onClick={() => setStyle(s)}
           >
             {s}
+          </button>
+        ))}
+      </div>
+
+      <div id="prog-concepts">
+        {CONCEPTS.map((cn) => (
+          <button
+            key={cn}
+            data-testid="concept-chip"
+            className={`spill${cn === concept ? ' on' : ''}`}
+            onClick={() => setConcept(cn)}
+          >
+            {cn}
           </button>
         ))}
       </div>
