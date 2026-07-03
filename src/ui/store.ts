@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { Mode, StringSet } from '../core/types';
 import type { VoicingStyle } from '../core/chords';
 
@@ -33,7 +34,9 @@ interface AppState {
   setTheme: (t: 'day' | 'night') => void;
 }
 
-export const useStore = create<AppState>((set) => ({
+export const useStore = create<AppState>()(
+  persist(
+    (set) => ({
   root: 0,
   quality: 'maj7',
   mode: 'shapes',
@@ -63,4 +66,7 @@ export const useStore = create<AppState>((set) => ({
   setShowAllPositions: (showAllPositions) => set({ showAllPositions }),
   setShowScale: (showScale) => set({ showScale }),
   setTheme: (theme) => set({ theme }),
-}));
+    }),
+    { name: 'fretdna-store' },
+  ),
+);
