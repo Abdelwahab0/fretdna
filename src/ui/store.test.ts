@@ -26,4 +26,16 @@ describe('store', () => {
     useStore.getState().setMode('intervals');
     expect(useStore.getState().hlInterval).toBe(0);
   });
+
+  it('triads-in-position defaults and setters', () => {
+    const s = useStore.getState();
+    expect(s.triadsInBox).toBe(false);
+    expect(s.triadDegree).toBe(null);
+    s.setTriadsInBox(true);
+    s.setTriadDegree(2);
+    expect(useStore.getState().triadsInBox).toBe(true);
+    expect(useStore.getState().triadDegree).toBe(2);
+    useStore.getState().setTriadDegree(null);
+    expect(useStore.getState().triadDegree).toBe(null);
+  });
 });

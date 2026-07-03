@@ -17,6 +17,8 @@ interface AppState {
   showBox: boolean;
   showAllPositions: boolean;
   showScale: boolean;
+  triadsInBox: boolean;
+  triadDegree: number | null;
   progId: string | null;
   progStep: number;
   theme: 'day' | 'night';
@@ -33,6 +35,8 @@ interface AppState {
   setShowBox: (b: boolean) => void;
   setShowAllPositions: (b: boolean) => void;
   setShowScale: (b: boolean) => void;
+  setTriadsInBox: (b: boolean) => void;
+  setTriadDegree: (n: number | null) => void;
   setProgId: (id: string | null) => void;
   setProgStep: (n: number) => void;
   setTheme: (t: 'day' | 'night') => void;
@@ -54,6 +58,8 @@ export const useStore = create<AppState>()(
   showBox: true,
   showAllPositions: false,
   showScale: false,
+  triadsInBox: false,
+  triadDegree: null,
   progId: null,
   progStep: 0,
   theme: 'day',
@@ -71,6 +77,8 @@ export const useStore = create<AppState>()(
   setShowBox: (showBox) => set({ showBox }),
   setShowAllPositions: (showAllPositions) => set({ showAllPositions }),
   setShowScale: (showScale) => set({ showScale }),
+  setTriadsInBox: (triadsInBox) => set({ triadsInBox }),
+  setTriadDegree: (triadDegree) => set({ triadDegree }),
   setProgId: (progId) => set({ progId }),
   setProgStep: (progStep) => set({ progStep }),
   setTheme: (theme) => set({ theme }),
