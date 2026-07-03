@@ -103,3 +103,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .spill:hover:not(.on){border-color:var(--border2);color:var(--text)}
 .spill.on{background:var(--accent);border-color:var(--accent);color:#fff}
 #prog-concepts .spill.on{background:var(--accent-bg);border-color:var(--c-3rd);color:var(--c-3rd)}
+#prog-transport{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.transport-btn{width:30px;height:30px;border-radius:50%;border:1px solid var(--accent);background:var(--accent);color:#fff;font-size:12px;cursor:pointer;transition:all .12s}
+.transport-btn:hover{filter:brightness(1.1)}
+#tempo-chips{display:flex;gap:4px}
