@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { chord, FEATURED, LIBRARY, STYLES } from './progressions';
+import { chord, FEATURED, LIBRARY, STYLES, CONCEPTS } from './progressions';
 import { QTYPES } from '../core/chords';
 
 describe('progressions content', () => {
@@ -25,5 +25,26 @@ describe('progressions content', () => {
   it('STYLES lists every style used', () => {
     const used = new Set([...FEATURED, ...LIBRARY].map((p) => p.style));
     for (const s of used) expect(STYLES).toContain(s);
+  });
+
+  it('every progression has a concept from CONCEPTS (never "All")', () => {
+    const all = [...FEATURED, ...LIBRARY];
+    const valid = new Set(CONCEPTS.filter((c) => c !== 'All'));
+    for (const p of all) {
+      expect(valid.has(p.concept), `${p.id} has invalid concept "${p.concept}"`).toBe(true);
+    }
+  });
+
+  it('CONCEPTS lists every concept used', () => {
+    const used = new Set([...FEATURED, ...LIBRARY].map((p) => p.concept));
+    for (const c of used) expect(CONCEPTS).toContain(c);
+  });
+
+  it('every shipped progression has non-empty DNA text', () => {
+    const all = [...FEATURED, ...LIBRARY];
+    for (const p of all) {
+      expect(typeof p.dna, `${p.id} dna missing`).toBe('string');
+      expect((p.dna ?? '').trim().length, `${p.id} dna empty`).toBeGreaterThan(0);
+    }
   });
 });

@@ -8,6 +8,7 @@ export interface Progression {
   id: string;
   title: string;
   style: string;
+  concept: string;
   chords: Chord[];
   dna: string | null;
 }
