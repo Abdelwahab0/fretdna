@@ -8,6 +8,7 @@ import { voicingsFor, shapeQualityOf, voicingSpan } from '../core/voicings';
 import { getScaleDots, SCALE_DEGREE } from '../core/scales';
 import { triadTonesInWindow } from '../core/diatonic';
 import { getChordIntervals } from '../core/chords';
+import { playNote } from './sound';
 
 const DOT_R = 13;
 const ROOT_R = 15;
@@ -119,7 +120,7 @@ export default function Fretboard() {
               const color = inTriad ? (ICOLORS[triadSemi] ?? '#888') : (theme === 'night' ? '#48597C' : '#B4AB96');
               const r = inTriad ? (triadSemi === 0 ? ROOT_R : DOT_R) : 9;
               return (
-                <g key={`tb${s}-${f}`} data-testid="triad-box-dot" transform={`translate(${cx},${cy})`}>
+                <g key={`tb${s}-${f}`} data-testid="triad-box-dot" transform={`translate(${cx},${cy})`} style={{ cursor: 'pointer' }} onClick={() => playNote(s, f)}>
                   <g className="nd">
                     {inTriad && triadSemi === 0 && <circle cx={0} cy={0} r={r + 3.5} fill="none" stroke={color} strokeWidth={1.5} opacity={0.35} />}
                     <circle cx={0} cy={0} r={r} fill={color} opacity={inTriad ? 0.95 : 0.5} />
@@ -140,7 +141,7 @@ export default function Fretboard() {
             const color = ICOLORS[semi] ?? '#888';
             const r = semi === 0 ? ROOT_R : DOT_R;
             return (
-              <g key={`v${string}-${fret}`} transform={`translate(${cx},${cy})`}>
+              <g key={`v${string}-${fret}`} transform={`translate(${cx},${cy})`} style={{ cursor: 'pointer' }} onClick={() => playNote(string, fret)}>
                 <g className="nd">
                   {semi === 0 && <circle cx={0} cy={0} r={r + 3.5} fill="none" stroke={color} strokeWidth={1.5} opacity={0.35} />}
                   <circle data-testid="voicing-dot" cx={0} cy={0} r={r} fill={color} opacity={semi === 0 ? 1 : 0.92} />
@@ -159,7 +160,7 @@ export default function Fretboard() {
           const color = inChord ? (ICOLORS[semi] ?? '#888') : (theme === 'night' ? '#48597C' : '#B4AB96');
           const r = inChord ? (semi === 0 ? ROOT_R : DOT_R) : 9;
           return (
-            <g key={`sc${s}-${f}`} transform={`translate(${cx},${cy})`}>
+            <g key={`sc${s}-${f}`} transform={`translate(${cx},${cy})`} style={{ cursor: 'pointer' }} onClick={() => playNote(s, f)}>
               <g className="nd">
                 {inChord && semi === 0 && <circle cx={0} cy={0} r={r + 3.5} fill="none" stroke={color} strokeWidth={1.5} opacity={0.35} />}
                 <circle cx={0} cy={0} r={r} fill={color} opacity={inChord ? 0.95 : 0.55} />
@@ -177,7 +178,7 @@ export default function Fretboard() {
           const color = ICOLORS[semi] ?? '#888';
           const r = semi === 0 ? ROOT_R : DOT_R;
           return (
-            <g key={`d${s}-${f}`} transform={`translate(${cx},${cy})`}>
+            <g key={`d${s}-${f}`} transform={`translate(${cx},${cy})`} style={{ cursor: 'pointer' }} onClick={() => playNote(s, f)}>
               <g className="nd" style={{ animationDelay: `${delay}ms` }}>
                 {semi === 0 && <circle cx={0} cy={0} r={r + 3.5} fill="none" stroke={color} strokeWidth={1.5} opacity={0.35} />}
                 <circle data-testid="dot" cx={0} cy={0} r={r} fill={color} opacity={semi === 0 ? 1 : 0.92} />

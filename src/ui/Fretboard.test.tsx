@@ -1,9 +1,16 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
 import Fretboard from './Fretboard';
 import { useStore } from './store';
 import { getDots } from '../core/fretboard';
 import { voicingsFor } from '../core/voicings';
+
+const playNoteSpy = vi.fn();
+vi.mock('./sound', () => ({
+  playNote: (...a: unknown[]) => playNoteSpy(...a),
+  strum: vi.fn(),
+  pluck: vi.fn(),
+}));
 
 const initial = useStore.getState();
 
@@ -23,6 +30,15 @@ describe('<Fretboard />', () => {
       voicing: s.voicing, stringSet: s.stringSet, hlInterval: s.hlInterval,
     }).length;
     expect(screen.getAllByTestId('dot')).toHaveLength(expected);
+  });
+
+  it('clicking a dot plays that note', () => {
+    playNoteSpy.mockClear();
+    useStore.setState({ root: 0, quality: 'maj', mode: 'shapes', voicingView: false });
+    render(<Fretboard />);
+    const dots = screen.getAllByTestId('dot');
+    fireEvent.click(dots[0].closest('g[transform]')!);
+    expect(playNoteSpy).toHaveBeenCalled();
   });
 });
 
