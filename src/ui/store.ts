@@ -3,6 +3,8 @@ import { persist } from 'zustand/middleware';
 import type { Mode, StringSet } from '../core/types';
 import type { VoicingStyle } from '../core/chords';
 
+export type Tempo = 'slow' | 'med' | 'fast';
+
 interface AppState {
   root: number;
   quality: string;
@@ -19,6 +21,8 @@ interface AppState {
   showScale: boolean;
   triadsInBox: boolean;
   triadDegree: number | null;
+  progFollow: boolean;
+  tempo: Tempo;
   progId: string | null;
   progStep: number;
   theme: 'day' | 'night';
@@ -37,6 +41,8 @@ interface AppState {
   setShowScale: (b: boolean) => void;
   setTriadsInBox: (b: boolean) => void;
   setTriadDegree: (n: number | null) => void;
+  setProgFollow: (b: boolean) => void;
+  setTempo: (t: Tempo) => void;
   setProgId: (id: string | null) => void;
   setProgStep: (n: number) => void;
   setTheme: (t: 'day' | 'night') => void;
@@ -60,6 +66,8 @@ export const useStore = create<AppState>()(
   showScale: false,
   triadsInBox: false,
   triadDegree: null,
+  progFollow: true,
+  tempo: 'med',
   progId: null,
   progStep: 0,
   theme: 'day',
@@ -79,6 +87,8 @@ export const useStore = create<AppState>()(
   setShowScale: (showScale) => set({ showScale }),
   setTriadsInBox: (triadsInBox) => set({ triadsInBox }),
   setTriadDegree: (triadDegree) => set({ triadDegree }),
+  setProgFollow: (progFollow) => set({ progFollow }),
+  setTempo: (tempo) => set({ tempo }),
   setProgId: (progId) => set({ progId }),
   setProgStep: (progStep) => set({ progStep }),
   setTheme: (theme) => set({ theme }),

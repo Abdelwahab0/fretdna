@@ -27,6 +27,16 @@ describe('store', () => {
     expect(useStore.getState().hlInterval).toBe(0);
   });
 
+  it('audio playback defaults and setters', () => {
+    const s = useStore.getState();
+    expect(s.progFollow).toBe(true);
+    expect(s.tempo).toBe('med');
+    s.setProgFollow(false);
+    s.setTempo('fast');
+    expect(useStore.getState().progFollow).toBe(false);
+    expect(useStore.getState().tempo).toBe('fast');
+  });
+
   it('triads-in-position defaults and setters', () => {
     const s = useStore.getState();
     expect(s.triadsInBox).toBe(false);
