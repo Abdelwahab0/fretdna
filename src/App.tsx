@@ -6,6 +6,7 @@ import VoicingControls from './ui/panels/VoicingControls';
 import ChordInfo from './ui/ChordInfo';
 import Legend from './ui/Legend';
 import Fretboard from './ui/Fretboard';
+import Progressions from './ui/Progressions';
 import { useStore } from './ui/store';
 import { useEffect } from 'react';
 
@@ -42,6 +43,7 @@ export default function App() {
             <Fretboard />
           </div>
           <Legend />
+          <Progressions />
         </div>
 
         <aside id="rp">

@@ -17,6 +17,8 @@ interface AppState {
   showBox: boolean;
   showAllPositions: boolean;
   showScale: boolean;
+  progId: string | null;
+  progStep: number;
   theme: 'day' | 'night';
   setRoot: (n: number) => void;
   setQuality: (q: string) => void;
@@ -31,6 +33,8 @@ interface AppState {
   setShowBox: (b: boolean) => void;
   setShowAllPositions: (b: boolean) => void;
   setShowScale: (b: boolean) => void;
+  setProgId: (id: string | null) => void;
+  setProgStep: (n: number) => void;
   setTheme: (t: 'day' | 'night') => void;
 }
 
@@ -50,6 +54,8 @@ export const useStore = create<AppState>()(
   showBox: true,
   showAllPositions: false,
   showScale: false,
+  progId: null,
+  progStep: 0,
   theme: 'day',
   setRoot: (root) => set({ root }),
   setQuality: (quality) => set({ quality }),
@@ -65,6 +71,8 @@ export const useStore = create<AppState>()(
   setShowBox: (showBox) => set({ showBox }),
   setShowAllPositions: (showAllPositions) => set({ showAllPositions }),
   setShowScale: (showScale) => set({ showScale }),
+  setProgId: (progId) => set({ progId }),
+  setProgStep: (progStep) => set({ progStep }),
   setTheme: (theme) => set({ theme }),
     }),
     { name: 'fretdna-store' },
