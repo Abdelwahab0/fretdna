@@ -21,7 +21,7 @@ describe('<VoicingControls />', () => {
   });
 
   it('shows no shape buttons for unsupported qualities', () => {
-    useStore.setState({ root: 0, quality: 'maj7', voicingView: true });
+    useStore.setState({ root: 0, quality: 'sus2', voicingView: true });
     render(<VoicingControls />);
     expect(screen.queryAllByTestId('chord-chart')).toHaveLength(0);
   });
