@@ -4,7 +4,7 @@ import {
   getDots, sy, fcx, flx, BOARD, BOARD_NIGHT, SW, INLAYS,
   VW, VH, NX, PT, PB, FMAX,
 } from '../core/fretboard';
-import { voicingsFor, triadQualityOf, voicingSpan } from '../core/voicings';
+import { voicingsFor, shapeQualityOf, voicingSpan } from '../core/voicings';
 import { getScaleDots, SCALE_DEGREE } from '../core/scales';
 import { getChordIntervals } from '../core/chords';
 
@@ -18,7 +18,7 @@ export default function Fretboard() {
   const stringGap = sy(1) - sy(0);
   const my = PT + ((SC - 1) * stringGap) / 2;
 
-  const tq = mode === 'shapes' && voicingView ? triadQualityOf(quality) : null;
+  const tq = mode === 'shapes' && voicingView ? shapeQualityOf(quality) : null;
   const voicings = tq ? voicingsFor(root, tq) : [];
   const selected = voicings.length ? voicings[shapeIndex % voicings.length] : null;
 

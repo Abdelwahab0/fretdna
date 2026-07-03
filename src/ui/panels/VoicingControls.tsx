@@ -1,10 +1,10 @@
 import { useStore } from '../store';
-import { voicingsFor, triadQualityOf } from '../../core/voicings';
+import { voicingsFor, shapeQualityOf } from '../../core/voicings';
 import ChordChart from '../ChordChart';
 
 export default function VoicingControls() {
   const { root, quality, voicingView, setVoicingView, shapeIndex, setShapeIndex, showGhost, setShowGhost, showBox, setShowBox, showAllPositions, setShowAllPositions } = useStore();
-  const tq = triadQualityOf(quality);
+  const tq = shapeQualityOf(quality);
   const voicings = tq ? voicingsFor(root, tq) : [];
 
   return (

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { shapeAt, MAJOR_SHAPE_ORDER, MINOR_SHAPE_ORDER } from './caged';
+import { shapeAt, MAJOR_SHAPE_ORDER, MINOR_SHAPE_ORDER, shapeOrderFor } from './caged';
 
 // Helper: get [fret per string 0..5], using -1 where the shape omits a string.
 function fretRow(notes: { string: number; fret: number }[]): number[] {
@@ -88,4 +88,54 @@ describe('shapeAt returns null for nonexistent minor shapes', () => {
     expect(shapeAt(0, 'C', 'min')).toBeNull();
     expect(shapeAt(0, 'G', 'min')).toBeNull();
   });
+});
+
+describe('seventh-chord shapes reproduce canonical open 7th chords', () => {
+  it('dom7 E-shape at E = E7 [0,0,1,0,2,0]', () => {
+    const r = shapeAt(4, 'E', 'dom7')!;
+    expect(fretRow(r.notes)).toEqual([0, 0, 1, 0, 2, 0]);
+    expect(semiRow(r.notes)).toEqual([0, 7, 4, 10, 7, 0]); // R,5,3,b7,5,R
+  });
+  it('dom7 A-shape at A = A7 [0,2,0,2,0,-1]', () => {
+    expect(fretRow(shapeAt(9, 'A', 'dom7')!.notes)).toEqual([0, 2, 0, 2, 0, -1]);
+  });
+  it('dom7 D-shape at D = D7 [2,1,2,0,-1,-1]', () => {
+    expect(fretRow(shapeAt(2, 'D', 'dom7')!.notes)).toEqual([2, 1, 2, 0, -1, -1]);
+  });
+  it('dom7 G-shape at G = G7 [1,0,0,0,2,3]', () => {
+    expect(fretRow(shapeAt(7, 'G', 'dom7')!.notes)).toEqual([1, 0, 0, 0, 2, 3]);
+  });
+  it('maj7 C-shape at C = Cmaj7 [0,0,0,2,3,-1]', () => {
+    expect(fretRow(shapeAt(0, 'C', 'maj7')!.notes)).toEqual([0, 0, 0, 2, 3, -1]);
+  });
+  it('maj7 E-shape at E = Emaj7 [0,0,1,1,2,0]', () => {
+    expect(fretRow(shapeAt(4, 'E', 'maj7')!.notes)).toEqual([0, 0, 1, 1, 2, 0]);
+  });
+  it('m7 A-shape at A = Am7 [0,1,0,2,0,-1]', () => {
+    const r = shapeAt(9, 'A', 'm7')!;
+    expect(fretRow(r.notes)).toEqual([0, 1, 0, 2, 0, -1]);
+    expect(semiRow(r.notes)).toEqual([7, 3, 10, 7, 0, -1]); // 5,b3,b7,5,R
+  });
+  it('m7 E-shape at E = Em7 [0,0,0,0,2,0]', () => {
+    expect(fretRow(shapeAt(4, 'E', 'm7')!.notes)).toEqual([0, 0, 0, 0, 2, 0]);
+  });
+});
+
+describe('every seventh voicing note is a real chord tone (across roots)', () => {
+  const tones: Record<string, Set<number>> = {
+    maj7: new Set([0, 4, 7, 11]),
+    m7: new Set([0, 3, 7, 10]),
+    dom7: new Set([0, 4, 7, 10]),
+  };
+  for (const q of ['maj7', 'm7', 'dom7'] as const) {
+    it(`${q} voicings only contain chord tones`, () => {
+      for (const root of [0, 3, 5, 7, 9, 11]) {
+        for (const shape of shapeOrderFor(q)) {
+          const r = shapeAt(root, shape, q);
+          if (!r) continue;
+          for (const n of r.notes) expect(tones[q].has(n.semi)).toBe(true);
+        }
+      }
+    });
+  }
 });

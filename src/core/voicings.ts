@@ -1,9 +1,9 @@
 import {
   shapeAt,
-  MAJOR_SHAPE_ORDER,
-  MINOR_SHAPE_ORDER,
+  shapeOrderFor,
   type CagedShape,
   type TriadQuality,
+  type ShapeQuality,
   type ShapeNote,
 } from './caged';
 
@@ -13,7 +13,7 @@ export interface VoicedNote extends ShapeNote {
 
 export interface Voicing {
   root: number;
-  quality: TriadQuality;
+  quality: ShapeQuality;
   shape: CagedShape;
   baseFret: number;
   notes: VoicedNote[];
@@ -50,9 +50,9 @@ export function assignFingers(baseFret: number, notes: ShapeNote[]): VoicedNote[
   }));
 }
 
-/** All playable CAGED voicings for a triad, in canonical CAGED order. */
-export function voicingsFor(root: number, quality: TriadQuality): Voicing[] {
-  const order = quality === 'maj' ? MAJOR_SHAPE_ORDER : MINOR_SHAPE_ORDER;
+/** All playable CAGED voicings for a chord quality, in canonical CAGED order. */
+export function voicingsFor(root: number, quality: ShapeQuality): Voicing[] {
+  const order = shapeOrderFor(quality);
   const out: Voicing[] = [];
   for (const shape of order) {
     const res = shapeAt(root, shape, quality);
@@ -73,6 +73,19 @@ export function triadQualityOf(quality: string): TriadQuality | null {
   if (quality === 'maj') return 'maj';
   if (quality === 'min') return 'min';
   return null;
+}
+
+/** Map an app chord-quality key to the CAGED shape quality we can voice, or null.
+ *  9th chords fall back to their parent 7th shape. */
+export function shapeQualityOf(quality: string): ShapeQuality | null {
+  switch (quality) {
+    case 'maj': return 'maj';
+    case 'min': return 'min';
+    case 'maj7': case 'maj9': return 'maj7';
+    case 'm7': case 'm9': return 'm7';
+    case 'dom7': case 'dom9': case 's9': return 'dom7';
+    default: return null;
+  }
 }
 
 /** The fret window a voicing occupies (min/max fret across its notes). */
