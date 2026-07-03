@@ -42,7 +42,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .fbtn{padding:7px 9px;font-size:11px;background:var(--panel2);border:1px solid var(--border);color:var(--dim);border-radius:var(--rs);text-align:left;transition:all .12s;width:100%}
 .fbtn.on{background:var(--accent-bg);border-color:var(--accent-border);color:var(--accent)}
 .fbtn:hover:not(.on){border-color:var(--border2);color:var(--text)}
-#ss-wrap,#vc-wrap,#shape-wrap{display:flex;flex-direction:column;gap:3px}
+#ss-wrap,#vc-wrap{display:flex;flex-direction:column;gap:3px}
+#shape-wrap{display:grid;grid-template-columns:1fr 1fr;gap:6px;justify-items:center;margin-top:2px}
+.chord-chart{transition:transform .1s}
+.chord-chart:hover{transform:translateY(-2px)}
 
 .tog-row{display:flex;align-items:center;gap:8px}
 .tog{position:relative;width:34px;height:19px;flex-shrink:0;cursor:pointer}

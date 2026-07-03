@@ -1,5 +1,6 @@
 import { useStore } from '../store';
 import { voicingsFor, triadQualityOf } from '../../core/voicings';
+import ChordChart from '../ChordChart';
 
 export default function VoicingControls() {
   const { root, quality, voicingView, setVoicingView, shapeIndex, setShapeIndex, showGhost, setShowGhost, showBox, setShowBox, showAllPositions, setShowAllPositions } = useStore();
@@ -22,14 +23,12 @@ export default function VoicingControls() {
           <>
             <div id="shape-wrap">
               {voicings.map((v, i) => (
-                <button
+                <ChordChart
                   key={v.shape}
-                  data-testid="shape-btn"
-                  className={`fbtn${i === shapeIndex % voicings.length ? ' on' : ''}`}
+                  voicing={v}
+                  selected={i === shapeIndex % voicings.length}
                   onClick={() => setShapeIndex(i)}
-                >
-                  {v.shape}-shape{v.baseFret > 0 ? ` (fret ${v.baseFret})` : ' (open)'}
-                </button>
+                />
               ))}
             </div>
             <div className="tog-row">
