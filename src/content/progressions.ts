@@ -51,6 +51,30 @@ export const FEATURED: Progression[] = [
     dna: 'Parallel 7#9 chords a 4th apart. No tonal center — pure energy and grit.' },
   { id: 'f20', title: 'By The Way Lift', style: 'Frusciante', chords: [c('F','maj7'), c('A#','maj'), c('C','maj')],
     dna: 'Imaj7→bVII→I: the bVII movement gives that lifted quality before resolving.' },
+
+  // ── Frusciante / RHCP (decode his moves) ──
+  { id: 'jf1', title: 'Californication Verse', style: 'Frusciante', chords: [c('A','min'), c('F','maj')],
+    dna: 'The whole verse is just vi→IV in C. Frusciante makes two chords hypnotic by moving only the top voice each pass — the Am/F barely shifts underneath while the melody note climbs.' },
+  { id: 'jf2', title: 'Dani California Verse', style: 'Frusciante', chords: [c('A','min'), c('G','maj'), c('D','min')],
+    dna: 'i→bVII→iv in A minor. The bVII (G) is a borrowed shot of brightness; falling to Dm (iv) keeps it brooding. The RHCP verse engine.' },
+  { id: 'jf3', title: 'Otherside Loop', style: 'Frusciante', chords: [c('A','min'), c('F','maj'), c('C','maj'), c('G','maj')],
+    dna: 'vi→IV→I→V in C — the same four chords as a thousand pop songs. Frusciante sells it by letting the open B and high-E strings ring through all four, so a pedal tone floats on top.' },
+  { id: 'jf4', title: 'Frusciante Add9 Jangle', style: 'Frusciante', chords: [c('D','add9'), c('A','add9'), c('G','add9')],
+    dna: 'His glassy shimmer: plain triads become add9 by letting an open string ring against the shape. The 9th sits a whole step above the root and rubs against it — that friction is the sheen.' },
+  { id: 'jf5', title: 'Frusciante Pentatonic Vamp', style: 'Frusciante', chords: [c('E','maj'), c('A','maj')],
+    dna: 'His country-tinged RHCP move: I→IV in E played as major-pentatonic double-stops — sliding 3rds and 6ths between the E and A shapes instead of strumming full chords.' },
+
+  // ── SRV ──
+  { id: 'srv1', title: 'SRV Shuffle in E', style: 'SRV', chords: [c('E','dom7'), c('A','dom7'), c('B','dom7')],
+    dna: 'A 12-bar in E, all dominant 7ths. The harmony is ordinary blues — what makes it SRV is the raked quarter-note ghost-strums packed between the chords.' },
+  { id: 'srv2', title: 'Texas Flood Slow Blues', style: 'SRV', chords: [c('G','dom7'), c('C','dom7'), c('D','dom7')],
+    dna: 'Slow 12-bar in G. The IV (C7) hitting on bar 5 is where SRV leans into the vibrato — a b7 in every chord keeps it aching and never quite sweet.' },
+
+  // ── Vulfpeck ──
+  { id: 'vulf1', title: 'Vulf Soul Turnaround', style: 'Vulfpeck', chords: [c('C','maj7'), c('A','m7'), c('D','m7'), c('G','dom7')],
+    dna: 'I→vi→ii→V, the soul turnaround Vulfpeck lives on. Every chord a clean 7th, every stab on the front of the beat, and — crucially — silence in between. The pocket is the point.' },
+  { id: 'vulf2', title: 'Vulf Dorian Pocket', style: 'Vulfpeck', chords: [c('D','m9'), c('G','dom9')],
+    dna: 'A ii→V in C that never resolves — it just loops in D dorian. All 9th chords played impossibly tight and quiet; the groove does the harmonic work.' },
 ];
 
 export const LIBRARY: Progression[] = [
@@ -76,4 +100,4 @@ export const LIBRARY: Progression[] = [
   { id: 'l20', style: 'Mayer', title: 'Peaceful Walk', chords: [c('G','maj'), c('D','maj'), c('A','m7'), c('C','maj')], dna: null },
 ];
 
-export const STYLES = ['All', 'Neo-Soul', 'Funk', 'Hendrix', 'Mayer', 'Frusciante'];
+export const STYLES = ['All', 'Frusciante', 'SRV', 'Vulfpeck', 'Hendrix', 'Neo-Soul', 'Funk', 'Mayer'];

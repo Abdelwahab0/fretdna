@@ -1,12 +1,15 @@
+import { useState } from 'react';
 import { useStore } from './store';
-import { FEATURED, LIBRARY } from '../content/progressions';
+import { FEATURED, LIBRARY, STYLES } from '../content/progressions';
 import type { Chord, Progression } from '../core/types';
 
 const ALL: Progression[] = [...FEATURED, ...LIBRARY];
 
 export default function Progressions() {
   const { progId, progStep, setProgId, setProgStep, setRoot, setQuality } = useStore();
+  const [style, setStyle] = useState('All');
   const active = ALL.find((p) => p.id === progId) ?? null;
+  const shown = style === 'All' ? ALL : ALL.filter((p) => p.style === style);
 
   const loadChord = (c: Chord) => {
     setRoot(c.root);
@@ -29,8 +32,21 @@ export default function Progressions() {
     <div id="prog">
       <div className="sec-label">Progressions — the DNA</div>
 
+      <div id="prog-styles">
+        {STYLES.map((s) => (
+          <button
+            key={s}
+            data-testid="style-chip"
+            className={`spill${s === style ? ' on' : ''}`}
+            onClick={() => setStyle(s)}
+          >
+            {s}
+          </button>
+        ))}
+      </div>
+
       <div id="prog-list">
-        {ALL.map((p) => (
+        {shown.map((p) => (
           <button
             key={p.id}
             data-testid="prog-chip"

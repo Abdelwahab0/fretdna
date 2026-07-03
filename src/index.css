@@ -92,3 +92,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .lc.on{background:var(--accent-bg);border-color:var(--accent-border);color:var(--accent);font-weight:600}
 #prog-dna{font-size:12.5px;line-height:1.55;color:var(--dim);margin:0}
 .dna-tag{font-size:9px;font-weight:600;letter-spacing:.5px;color:var(--accent);text-transform:uppercase;margin-right:8px}
+#prog-styles{display:flex;gap:5px;flex-wrap:wrap}
+.spill{padding:3px 11px;font-size:11px;font-weight:500;background:var(--panel2);border:1px solid var(--border);color:var(--dim);border-radius:20px;white-space:nowrap;transition:all .12s}
+.spill:hover:not(.on){border-color:var(--border2);color:var(--text)}
+.spill.on{background:var(--accent);border-color:var(--accent);color:#fff}
