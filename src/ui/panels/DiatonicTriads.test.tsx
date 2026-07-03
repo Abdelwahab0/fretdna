@@ -1,7 +1,14 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import DiatonicTriads from './DiatonicTriads';
 import { useStore } from '../store';
+
+const strumSpy = vi.fn();
+vi.mock('../sound', () => ({
+  strum: (...a: unknown[]) => strumSpy(...a),
+  playNote: vi.fn(),
+  pluck: vi.fn(),
+}));
 
 describe('DiatonicTriads in-position toggle', () => {
   beforeEach(() => {
@@ -29,5 +36,13 @@ describe('DiatonicTriads in-position toggle', () => {
     fireEvent.click(screen.getAllByTestId('triad-btn')[1]); // ii = D minor, root 2
     expect(useStore.getState().root).toBe(2);
     expect(useStore.getState().triadDegree).toBe(null);
+  });
+
+  it('clicking a triad chip strums it', () => {
+    strumSpy.mockClear();
+    render(<DiatonicTriads />);
+    fireEvent.click(screen.getAllByTestId('triad-btn')[0]);
+    expect(strumSpy).toHaveBeenCalledTimes(1);
+    expect((strumSpy.mock.calls[0][0] as number[]).length).toBe(3);
   });
 });

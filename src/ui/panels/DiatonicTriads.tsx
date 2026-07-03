@@ -1,5 +1,7 @@
 import { useStore } from '../store';
 import { diatonicTriads } from '../../core/diatonic';
+import { strum } from '../sound';
+import { chordFreqs } from '../../core/audio';
 
 export default function DiatonicTriads() {
   const { root, quality, setRoot, setQuality, triadsInBox, triadDegree, setTriadsInBox, setTriadDegree } = useStore();
@@ -27,6 +29,7 @@ export default function DiatonicTriads() {
               data-testid="triad-btn"
               className={`fbtn${on ? ' on' : ''}`}
               onClick={() => {
+                strum(chordFreqs(t.root, t.quality));
                 if (triadsInBox) {
                   setTriadDegree(i === triadDegree ? null : i);
                 } else {
