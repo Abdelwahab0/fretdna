@@ -107,3 +107,30 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .transport-btn{width:30px;height:30px;border-radius:50%;border:1px solid var(--accent);background:var(--accent);color:#fff;font-size:12px;cursor:pointer;transition:all .12s}
 .transport-btn:hover{filter:brightness(1.1)}
 #tempo-chips{display:flex;gap:4px}
+
+/* ── Phones / narrow screens: stack the 3 columns, scroll the page as one ── */
+@media (max-width: 720px) {
+  #main { flex-direction: column; }
+  /* panels become full-width stacked sections instead of fixed side columns */
+  #lp, #rp {
+    width: auto;
+    flex-shrink: 1;
+    overflow-y: visible;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 14px 16px;
+  }
+  #ctr {
+    overflow-y: visible;
+    padding: 14px 14px 28px;
+  }
+  /* let the centre content use the full width */
+  #cinfo, #fb-wrap, #prog { max-width: none; }
+  #cinfo { flex-wrap: wrap; row-gap: 8px; }
+  /* the header can breathe a bit less on small screens */
+  #hdr { padding: 0 14px; }
+  /* compact the tall control sections so the fretboard isn't pushed way down */
+  #qual-grid { grid-template-columns: repeat(3, 1fr); }
+  #tri-wrap { display: grid; grid-template-columns: 1fr 1fr; }
+}
